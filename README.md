@@ -10,11 +10,13 @@ An official JavaScript client for iBootCloud.
 First of all, you need to install the library:
 
 ```sh
-npm install @ibootcloud/js-sdk
+npm install @ibootcloud/js-sdk --registry=https://cherryez-npm.pkg.coding.net/ibootcloud/public-npm/
 ```
 ```sh
-yarn add @ibootcloud/js-sdk
+yarn add @ibootcloud/js-sdk --registry=https://cherryez-npm.pkg.coding.net/ibootcloud/public-npm/
 ```
+
+> By the way, you can find our official public npm lib in [this](https://cherryez.coding.net/public-artifacts/ibootcloud/public-npm/packages)
 
 Then you're able to import the library and establish the connection with the database:
 

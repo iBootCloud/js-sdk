@@ -46,7 +46,7 @@ export const createClient = (
     throwOnFail,
   };
   return {
-    databox: (param: CreateServiceClientConfig) =>
+    databox: (param?: CreateServiceClientConfig) =>
       createDataboxClient({ ...serviceClientConfig, ...param }),
   };
 };

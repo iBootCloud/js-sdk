@@ -23,3 +23,9 @@ export interface ExpireKeysBody {
   expiredTime?: string;
   ttl?: number;
 }
+export interface IncreaseValueResponse {
+  value: number;
+}
+export interface DecreaseValueResponse {
+  value: number;
+}

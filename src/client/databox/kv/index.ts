@@ -1,9 +1,11 @@
 import { AxiosBaseClient } from '../../axios';
 import { CreateModuleClientConfig } from '../index';
 import {
+  DecreaseValueResponse,
   ExpireKeysBody,
   GetKeysInNamespaceResponse,
   GetKVResponse,
+  IncreaseValueResponse,
   KVContent,
   RemoveKeysBody,
   RemoveKeysResponse,
@@ -127,6 +129,36 @@ export const createKVClient = (
             : undefined,
         }),
       });
+    },
+
+    /**
+     * KV键值自增 [V1]
+     * @return 更新后的值
+     */
+    increaseValue: async (key: string, step?: number): Promise<number> => {
+      const resp = await axios.request<IncreaseValueResponse>({
+        url: `/v1/kv/namespace/${namespace}/value/${key}/increase`,
+        method: 'POST',
+        params: ObjectUtil.removeEmpty({
+          step,
+        }),
+      });
+      return parseInt(String(resp.data!.value));
+    },
+
+    /**
+     * KV键值自减 [V1]
+     * @return 更新后的值
+     */
+    decreaseValue: async (key: string, step?: number): Promise<number> => {
+      const resp = await axios.request<DecreaseValueResponse>({
+        url: `/v1/kv/namespace/${namespace}/value/${key}/decrease`,
+        method: 'POST',
+        params: ObjectUtil.removeEmpty({
+          step,
+        }),
+      });
+      return parseInt(String(resp.data!.value));
     },
   };
 };

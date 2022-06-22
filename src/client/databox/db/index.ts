@@ -17,24 +17,23 @@ export const createDBClient = (
   return {
     table: (tableClientConfig?: DBTableClientConfig) =>
       createDBTableClient(axios, tableClientConfig),
+
     /**
      * 初始化DB实例
-     * @param instanceId 实例ID
      */
-    initInstance: async (instanceId: string): Promise<void> => {
+    initInstance: async (): Promise<void> => {
       await axios.request<void>({
-        url: `/v1/db/instance/${instanceId}/init`,
+        url: `/v1/db/instance/init`,
         method: 'POST',
       });
     },
 
     /**
      * 移除DB实例
-     * @param instanceId 实例ID
      */
-    removeInstance: async (instanceId: string): Promise<void> => {
+    removeInstance: async (): Promise<void> => {
       await axios.request<void>({
-        url: `/v1/db/instance/${instanceId}`,
+        url: `/v1/db/instance`,
         method: 'DELETE',
       });
     },

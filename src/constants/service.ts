@@ -1,4 +1,4 @@
-export enum Service {
+export enum IBCService {
   IBC = 'iBootCloud',
   DATABOX = 'Databox',
   MICOFUN = 'Micofun',

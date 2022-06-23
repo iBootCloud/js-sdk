@@ -1,31 +1,31 @@
-export type KVContent = Record<string, string>;
-export interface RemoveNamespaceResponse {
+export type DataboxKVContent = Record<string, string>;
+export interface RemoveDataboxKVNamespaceResponse {
   affected: number;
 }
-export type GetKeysInNamespaceResponse = string[];
-export interface GetKVParam {
+export type DataboxKVGetKeysInNamespaceResponse = string[];
+export interface DataboxKVGetKVParam {
   keys?: string[];
 }
-export type GetKVResponse = KVContent;
-export interface SaveKVBody {
-  kv: KVContent;
+export type DataboxKVGetKVResponse = DataboxKVContent;
+export interface DataboxKVSaveKVBody {
+  kv: DataboxKVContent;
   expiredTime?: string;
   ttl?: number;
 }
-export interface RemoveKeysBody {
+export interface DataboxKVRemoveKeysBody {
   key: string[];
 }
-export interface RemoveKeysResponse {
+export interface DataboxKVRemoveKeysResponse {
   affected: number;
 }
-export interface ExpireKeysBody {
+export interface DataboxKVExpireKeysBody {
   key?: string[];
   expiredTime?: string;
   ttl?: number;
 }
-export interface IncreaseValueResponse {
+export interface DataboxKVIncreaseValueResponse {
   value: number;
 }
-export interface DecreaseValueResponse {
+export interface DataboxKVDecreaseValueResponse {
   value: number;
 }

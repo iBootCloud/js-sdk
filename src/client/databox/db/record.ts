@@ -1,28 +1,28 @@
 import { AxiosBaseClient, PaginationOpt } from '../../axios';
-import { DBTableClientConfig } from './table';
+import { DataboxDBTableClientConfig } from './table';
 import {
-  CountRecordsInTableResponse,
-  InsertRecordBody,
-  InsertRecordResponse,
-  QueryRecordBody,
-  QueryRecordResponse,
-  ReadRecordByIdResponse,
-  RecordData,
-  RecordRow,
-  RemoveRecordByIdResponse,
-  UpdateRecordByIdBody,
-  UpdateRecordByIdResponse,
-} from '../../../types/databox/db.dto';
+  DataboxDBCountRecordsInTableResponse,
+  DataboxDBInsertRecordBody,
+  DataboxDBInsertRecordResponse,
+  DataboxDBQueryRecordBody,
+  DataboxDBQueryRecordResponse,
+  DataboxDBReadRecordByIdResponse,
+  DataboxDBRecordData,
+  DataboxDBRecordRow,
+  DataboxDBRemoveRecordByIdResponse,
+  DataboxDBUpdateRecordByIdBody,
+  DataboxDBUpdateRecordByIdResponse,
+} from '../../../types';
 import { IBC } from '@ibootcloud/common-lib';
 
-export class RecordClient {
+export class DataboxDBRecordClient {
   axios: AxiosBaseClient;
   table: string;
-  recordData: RecordData;
+  recordData: DataboxDBRecordData;
   constructor(
     axios: AxiosBaseClient,
-    { table }: DBTableClientConfig,
-    recordData: RecordData = {}
+    { table }: DataboxDBTableClientConfig,
+    recordData: DataboxDBRecordData = {}
   ) {
     this.axios = axios;
     this.table = table;
@@ -33,7 +33,9 @@ export class RecordClient {
    * 获取记录数目
    */
   async count(): Promise<number> {
-    const response = await this.axios.request<CountRecordsInTableResponse>({
+    const response = await this.axios.request<
+      DataboxDBCountRecordsInTableResponse
+    >({
       url: `/v1/db/table/${this.table}/count`,
       method: 'GET',
     });
@@ -43,10 +45,12 @@ export class RecordClient {
   /**
    * 插入记录
    */
-  async insert(record: RecordData = this.recordData): Promise<boolean> {
+  async insert(
+    record: DataboxDBRecordData = this.recordData
+  ): Promise<boolean> {
     const response = await this.axios.request<
-      InsertRecordResponse,
-      InsertRecordBody
+      DataboxDBInsertRecordResponse,
+      DataboxDBInsertRecordBody
     >({
       url: `/v1/db/table/${this.table}/record`,
       method: 'POST',
@@ -58,8 +62,8 @@ export class RecordClient {
   /**
    * 通过ID获取记录
    */
-  async readById(id?: string): Promise<RecordRow> {
-    const response = await this.axios.request<ReadRecordByIdResponse>({
+  async readById(id?: string): Promise<DataboxDBRecordRow> {
+    const response = await this.axios.request<DataboxDBReadRecordByIdResponse>({
       url: `/v1/db/table/${this.table}/record/${id ?? this.recordData._id}`,
       method: 'GET',
     });
@@ -73,10 +77,10 @@ export class RecordClient {
   async query(
     query: object,
     opt?: PaginationOpt
-  ): Promise<IBC.Page<RecordRow>> {
+  ): Promise<IBC.Page<DataboxDBRecordRow>> {
     const response = await this.axios.request<
-      QueryRecordResponse,
-      QueryRecordBody
+      DataboxDBQueryRecordResponse,
+      DataboxDBQueryRecordBody
     >(
       {
         url: `/v1/db/table/${this.table}/query`,
@@ -94,12 +98,12 @@ export class RecordClient {
    * 目前仅支持 $set $unset
    */
   async updateById(
-    updateObj: UpdateRecordByIdBody,
+    updateObj: DataboxDBUpdateRecordByIdBody,
     id?: string
   ): Promise<boolean> {
     const response = await this.axios.request<
-      UpdateRecordByIdResponse,
-      UpdateRecordByIdBody
+      DataboxDBUpdateRecordByIdResponse,
+      DataboxDBUpdateRecordByIdBody
     >({
       url: `/v1/db/table/${this.table}/record/${id ?? this.recordData.id}`,
       method: 'PUT',
@@ -112,7 +116,9 @@ export class RecordClient {
    * 通过ID移除记录
    */
   async removeById(id?: string): Promise<boolean> {
-    const response = await this.axios.request<RemoveRecordByIdResponse>({
+    const response = await this.axios.request<
+      DataboxDBRemoveRecordByIdResponse
+    >({
       url: `/v1/db/table/${this.table}/record/${id ?? this.recordData.id}`,
       method: 'DELETE',
     });
@@ -122,6 +128,7 @@ export class RecordClient {
 
 export const createRecordClient = (
   axios: AxiosBaseClient,
-  dbTableClientConfig: DBTableClientConfig,
-  recordData: RecordData = {}
-): RecordClient => new RecordClient(axios, dbTableClientConfig, recordData);
+  dbTableClientConfig: DataboxDBTableClientConfig,
+  recordData: DataboxDBRecordData = {}
+): DataboxDBRecordClient =>
+  new DataboxDBRecordClient(axios, dbTableClientConfig, recordData);

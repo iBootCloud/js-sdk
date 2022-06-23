@@ -1,45 +1,59 @@
-import { ServiceClientConfig } from '../index';
-import { createDBClient, DBClient, DBClientConfig } from './db';
+import { IBCServiceClientConfig } from '../index';
 import { LANG } from '@ibootcloud/common-lib';
-import { ENV, Service } from '../../constants';
-import { ClientLogAdapter } from '../axios';
-import { createKVClient, KVClient, KVClientConfig } from './kv';
-import { createListClient, ListClient, ListClientConfig } from './list';
-import { createUIDClient, UIDClient, UIDClientConfig } from './uid';
+import { ENV, IBCService } from '../../constants';
+import { IBCClientLogAdapter } from '../axios';
+import { createDBClient, DataboxDBClient, DataboxDBClientConfig } from './db';
+import { createKVClient, DataboxKVClient, DataboxKVClientConfig } from './kv';
+import {
+  createListClient,
+  DataboxListClient,
+  DataboxListClientConfig,
+} from './list';
+import {
+  createUIDClient,
+  DataboxUIDClient,
+  DataboxUIDClientConfig,
+} from './uid';
 
-export interface ModuleClientConfig {
+export * from './db';
+export * from './kv';
+export * from './list';
+export * from './uid';
+
+export interface DataboxModuleClientConfig {
   lang: LANG;
   apiKey?: string;
   accessToken?: string;
   env: ENV;
   timeout: number;
-  service: Service;
-  logAdapter?: ClientLogAdapter;
+  service: IBCService;
+  logAdapter?: IBCClientLogAdapter;
   baseUrl?: string;
   throwOnFail: boolean;
 }
 
 export class DataboxClient {
-  moduleClientConfig: ModuleClientConfig;
-  constructor(cfg: ServiceClientConfig) {
+  moduleClientConfig: DataboxModuleClientConfig;
+  constructor(cfg: IBCServiceClientConfig) {
     this.moduleClientConfig = {
       ...cfg,
-      service: Service.DATABOX,
+      service: IBCService.DATABOX,
     };
   }
-  db(dbClientConfig: DBClientConfig): DBClient {
+  db(dbClientConfig: DataboxDBClientConfig): DataboxDBClient {
     return createDBClient(this.moduleClientConfig, dbClientConfig);
   }
-  kv(kvClientConfig: KVClientConfig): KVClient {
+  kv(kvClientConfig: DataboxKVClientConfig): DataboxKVClient {
     return createKVClient(this.moduleClientConfig, kvClientConfig);
   }
-  list(listClientConfig: ListClientConfig): ListClient {
+  list(listClientConfig: DataboxListClientConfig): DataboxListClient {
     return createListClient(this.moduleClientConfig, listClientConfig);
   }
-  uid(uidClientConfig?: UIDClientConfig): UIDClient {
+  uid(uidClientConfig?: DataboxUIDClientConfig): DataboxUIDClient {
     return createUIDClient(this.moduleClientConfig, uidClientConfig);
   }
 }
 
-export const createDataboxClient = (cfg: ServiceClientConfig): DataboxClient =>
-  new DataboxClient(cfg);
+export const createDataboxClient = (
+  cfg: IBCServiceClientConfig
+): DataboxClient => new DataboxClient(cfg);

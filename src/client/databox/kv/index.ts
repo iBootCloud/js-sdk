@@ -1,33 +1,33 @@
 import { AxiosBaseClient } from '../../axios';
-import { ModuleClientConfig } from '../index';
+import { DataboxModuleClientConfig } from '../index';
 import {
-  DecreaseValueResponse,
-  ExpireKeysBody,
-  GetKeysInNamespaceResponse,
-  GetKVResponse,
-  IncreaseValueResponse,
-  KVContent,
-  RemoveKeysBody,
-  RemoveKeysResponse,
-  RemoveNamespaceResponse,
-  SaveKVBody,
-} from '../../../types/databox/kv.dto';
+  DataboxKVDecreaseValueResponse,
+  DataboxKVExpireKeysBody,
+  DataboxKVGetKeysInNamespaceResponse,
+  DataboxKVGetKVResponse,
+  DataboxKVIncreaseValueResponse,
+  DataboxKVContent,
+  DataboxKVRemoveKeysBody,
+  DataboxKVRemoveKeysResponse,
+  RemoveDataboxKVNamespaceResponse,
+  DataboxKVSaveKVBody,
+} from '../../../types';
 import { ObjectUtil, TimeUtil } from '@ibootcloud/common-lib';
 
-export interface KVClientConfig {
+export interface DataboxKVClientConfig {
   instanceId: string;
   namespace?: string;
 }
-export const DEFAULT_NS = 'DEFAULT';
+export const KV_DEFAULT_NS = 'DEFAULT';
 
-export class KVClient {
+export class DataboxKVClient {
   axios: AxiosBaseClient;
-  moduleClientConfig: ModuleClientConfig;
+  moduleClientConfig: DataboxModuleClientConfig;
   instanceId: string;
   namespace: string;
   constructor(
-    moduleClientConfig: ModuleClientConfig,
-    { instanceId, namespace = DEFAULT_NS }: KVClientConfig
+    moduleClientConfig: DataboxModuleClientConfig,
+    { instanceId, namespace = KV_DEFAULT_NS }: DataboxKVClientConfig
   ) {
     this.moduleClientConfig = moduleClientConfig;
     this.instanceId = instanceId;
@@ -44,10 +44,12 @@ export class KVClient {
    * @return 移除的键数目
    */
   async removeNamespace(ns: string = this.namespace): Promise<number> {
-    const response = await this.axios.request<RemoveNamespaceResponse>({
-      url: `/v1/kv/namespace/${ns}`,
-      method: 'DELETE',
-    });
+    const response = await this.axios.request<RemoveDataboxKVNamespaceResponse>(
+      {
+        url: `/v1/kv/namespace/${ns}`,
+        method: 'DELETE',
+      }
+    );
     return response.data!.affected;
   }
   /**
@@ -55,23 +57,25 @@ export class KVClient {
    * @return 键名数组
    */
   async keys(): Promise<string[]> {
-    const response = await this.axios.request<GetKeysInNamespaceResponse>({
+    const response = await this.axios.request<
+      DataboxKVGetKeysInNamespaceResponse
+    >({
       url: `/v1/kv/namespace/${this.namespace}/keys`,
       method: 'GET',
     });
-    return response.data as GetKeysInNamespaceResponse;
+    return response.data as DataboxKVGetKeysInNamespaceResponse;
   }
   /**
    * 获取KV键值对 [V1]
    * @return 键值对
    */
-  async read(keys?: string[]): Promise<KVContent> {
-    const response = await this.axios.request<GetKVResponse>({
+  async read(keys?: string[]): Promise<DataboxKVContent> {
+    const response = await this.axios.request<DataboxKVGetKVResponse>({
       url: `/v1/kv/namespace/${this.namespace}/values`,
       method: 'GET',
       params: ObjectUtil.removeEmpty({ keys }),
     });
-    return response.data as GetKVResponse;
+    return response.data as DataboxKVGetKVResponse;
   }
   /**
    * 获取KV键值 [V1]
@@ -91,10 +95,10 @@ export class KVClient {
    * @param expire 键过期时间配置优先级 expiredTime > ttl
    */
   async save(
-    kv: KVContent,
+    kv: DataboxKVContent,
     expire?: { ttl?: number; expiredTime?: Date }
   ): Promise<void> {
-    await this.axios.request<void, SaveKVBody>({
+    await this.axios.request<void, DataboxKVSaveKVBody>({
       url: `/v1/kv/namespace/${this.namespace}/values`,
       method: 'PUT',
       data: ObjectUtil.removeEmpty({
@@ -111,8 +115,8 @@ export class KVClient {
    */
   async removeKeys(keys: string[]): Promise<number> {
     const response = await this.axios.request<
-      RemoveKeysResponse,
-      RemoveKeysBody
+      DataboxKVRemoveKeysResponse,
+      DataboxKVRemoveKeysBody
     >({
       url: `/v1/kv/namespace/${this.namespace}/keys`,
       method: 'DELETE',
@@ -129,7 +133,7 @@ export class KVClient {
     keys: string[],
     expire?: { ttl?: number; expiredTime?: Date }
   ): Promise<void> {
-    await this.axios.request<void, ExpireKeysBody>({
+    await this.axios.request<void, DataboxKVExpireKeysBody>({
       url: `/v1/kv/namespace/${this.namespace}/expire`,
       method: 'POST',
       data: ObjectUtil.removeEmpty({
@@ -147,7 +151,7 @@ export class KVClient {
    * @return 更新后的值
    */
   async increaseValue(key: string, step?: number): Promise<number> {
-    const resp = await this.axios.request<IncreaseValueResponse>({
+    const resp = await this.axios.request<DataboxKVIncreaseValueResponse>({
       url: `/v1/kv/namespace/${this.namespace}/value/${key}/increase`,
       method: 'POST',
       params: ObjectUtil.removeEmpty({
@@ -162,7 +166,7 @@ export class KVClient {
    * @return 更新后的值
    */
   async decreaseValue(key: string, step?: number): Promise<number> {
-    const resp = await this.axios.request<DecreaseValueResponse>({
+    const resp = await this.axios.request<DataboxKVDecreaseValueResponse>({
       url: `/v1/kv/namespace/${this.namespace}/value/${key}/decrease`,
       method: 'POST',
       params: ObjectUtil.removeEmpty({
@@ -174,6 +178,6 @@ export class KVClient {
 }
 
 export const createKVClient = (
-  moduleClientConfig: ModuleClientConfig,
-  kvClientConfig: KVClientConfig
-): KVClient => new KVClient(moduleClientConfig, kvClientConfig);
+  moduleClientConfig: DataboxModuleClientConfig,
+  kvClientConfig: DataboxKVClientConfig
+): DataboxKVClient => new DataboxKVClient(moduleClientConfig, kvClientConfig);

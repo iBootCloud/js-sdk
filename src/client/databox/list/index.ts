@@ -1,40 +1,40 @@
 import { AxiosBaseClient } from '../../axios';
-import { ModuleClientConfig } from '../index';
+import { DataboxModuleClientConfig } from '../index';
 import { ObjectUtil, TimeUtil } from '@ibootcloud/common-lib';
 import {
-  AddItemsBody,
-  AddItemsResponse,
-  AddItemsType,
-  ExpireListsBody,
-  FindItemIndexParam,
-  FindItemIndexResponse,
-  GetListIdInNamespaceResponse,
-  GetListItemParam,
-  GetListItemResponse,
+  DataboxListAddItemsBody,
+  DataboxListAddItemsResponse,
+  DataboxListAddItemsType,
+  DataboxListExpireListsBody,
+  DataboxListFindItemIndexParam,
+  DataboxListFindItemIndexResponse,
+  DataboxListGetListIdInNamespaceResponse,
+  DataboxListGetListItemParam,
+  DataboxListGetListItemResponse,
   ListItem,
-  RemoveItemsBody,
-  RemoveItemsResponse,
-  RemoveItemsType,
-  RemoveListResponse,
-  RemoveListsBody,
-  RemoveNamespaceResponse,
-  SetListBody,
-  UpdateItemByIndexBody,
-} from '../../../types/databox/list.dto';
+  DataboxListRemoveItemsBody,
+  DataboxListRemoveItemsResponse,
+  DataboxListRemoveItemsType,
+  DataboxListRemoveListResponse,
+  DataboxListRemoveListsBody,
+  DataboxListRemoveNamespaceResponse,
+  DataboxListSetListBody,
+  DataboxListUpdateItemByIndexBody,
+} from '../../../types';
 
-export interface ListClientConfig {
+export interface DataboxListClientConfig {
   instanceId: string;
   namespace?: string;
 }
-export const DEFAULT_NS = 'DEFAULT';
+export const LIST_DEFAULT_NS = 'DEFAULT';
 
-export class ListClient {
+export class DataboxListClient {
   axios: AxiosBaseClient;
   instanceId: string;
   namespace: string;
   constructor(
-    moduleClientConfig: ModuleClientConfig,
-    { instanceId, namespace = DEFAULT_NS }: ListClientConfig
+    moduleClientConfig: DataboxModuleClientConfig,
+    { instanceId, namespace = LIST_DEFAULT_NS }: DataboxListClientConfig
   ) {
     this.instanceId = instanceId;
     this.namespace = namespace;
@@ -50,7 +50,9 @@ export class ListClient {
    * @return 移除的List数目
    */
   async removeNamespace(ns: string = this.namespace): Promise<number> {
-    const response = await this.axios.request<RemoveNamespaceResponse>({
+    const response = await this.axios.request<
+      DataboxListRemoveNamespaceResponse
+    >({
       url: `/v1/list/namespace/${ns}`,
       method: 'DELETE',
     });
@@ -61,23 +63,28 @@ export class ListClient {
    * @return ListId数组
    */
   async listIds(): Promise<string[]> {
-    const response = await this.axios.request<GetListIdInNamespaceResponse>({
+    const response = await this.axios.request<
+      DataboxListGetListIdInNamespaceResponse
+    >({
       url: `/v1/list/namespace/${this.namespace}/listId`,
       method: 'GET',
     });
-    return response.data as GetListIdInNamespaceResponse;
+    return response.data as DataboxListGetListIdInNamespaceResponse;
   }
   /**
    * 获取List元素 [V1]
    * @return 列表元素
    */
-  async getItems(listId: string, opt?: GetListItemParam): Promise<ListItem[]> {
-    const response = await this.axios.request<GetListItemResponse>({
+  async getItems(
+    listId: string,
+    opt?: DataboxListGetListItemParam
+  ): Promise<ListItem[]> {
+    const response = await this.axios.request<DataboxListGetListItemResponse>({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}/items`,
       method: 'GET',
-      params: ObjectUtil.removeEmpty(opt) as GetListItemParam,
+      params: ObjectUtil.removeEmpty(opt) as DataboxListGetListItemParam,
     });
-    return response.data as GetListItemResponse;
+    return response.data as DataboxListGetListItemResponse;
   }
   /**
    * 获取List元素 [V1]
@@ -103,7 +110,7 @@ export class ListClient {
     list: ListItem[],
     expire?: { ttl?: number; expiredTime?: Date }
   ): Promise<void> {
-    await this.axios.request<void, SetListBody>({
+    await this.axios.request<void, DataboxListSetListBody>({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}`,
       method: 'PUT',
       data: ObjectUtil.removeEmpty({
@@ -121,8 +128,8 @@ export class ListClient {
    */
   async removeLists(listId: string[]): Promise<number> {
     const response = await this.axios.request<
-      RemoveListResponse,
-      RemoveListsBody
+      DataboxListRemoveListResponse,
+      DataboxListRemoveListsBody
     >({
       url: `/v1/list/namespace/${this.namespace}/list`,
       method: 'DELETE',
@@ -139,7 +146,7 @@ export class ListClient {
     listId: string[],
     expire?: { ttl?: number; expiredTime?: Date }
   ): Promise<void> {
-    await this.axios.request<void, ExpireListsBody>({
+    await this.axios.request<void, DataboxListExpireListsBody>({
       url: `/v1/list/namespace/${this.namespace}/expire`,
       method: 'POST',
       data: ObjectUtil.removeEmpty({
@@ -161,9 +168,12 @@ export class ListClient {
   async addItems(
     listId: string,
     items: ListItem[],
-    type: AddItemsType
+    type: DataboxListAddItemsType
   ): Promise<number> {
-    const response = await this.axios.request<AddItemsResponse, AddItemsBody>({
+    const response = await this.axios.request<
+      DataboxListAddItemsResponse,
+      DataboxListAddItemsBody
+    >({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}/item`,
       method: 'POST',
       data: {
@@ -185,12 +195,12 @@ export class ListClient {
   async removeItem(
     listId: string,
     item: ListItem,
-    type: RemoveItemsType,
+    type: DataboxListRemoveItemsType,
     count: number = 1
   ): Promise<number | ListItem[]> {
     const response = await this.axios.request<
-      RemoveItemsResponse,
-      RemoveItemsBody
+      DataboxListRemoveItemsResponse,
+      DataboxListRemoveItemsBody
     >({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}/item`,
       method: 'DELETE',
@@ -200,7 +210,7 @@ export class ListClient {
         count,
       },
     });
-    if (type === RemoveItemsType.EQUAL) {
+    if (type === DataboxListRemoveItemsType.EQUAL) {
       return response.data!.affected as number;
     } else {
       return response.data!.items as ListItem[];
@@ -220,7 +230,7 @@ export class ListClient {
     index: number,
     item: ListItem
   ): Promise<void> {
-    await this.axios.request<void, UpdateItemByIndexBody>({
+    await this.axios.request<void, DataboxListUpdateItemByIndexBody>({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}/item/${index}`,
       method: 'PATCH',
       data: {
@@ -238,18 +248,21 @@ export class ListClient {
    * @return 查询到的元素索引; -1代表未查询到元素
    */
   async index(listId: string, item: ListItem): Promise<number> {
-    const response = await this.axios.request<FindItemIndexResponse>({
-      url: `/v1/list/namespace/${this.namespace}/list/${listId}/index`,
-      method: 'GET',
-      params: {
-        item,
-      } as FindItemIndexParam,
-    });
+    const response = await this.axios.request<DataboxListFindItemIndexResponse>(
+      {
+        url: `/v1/list/namespace/${this.namespace}/list/${listId}/index`,
+        method: 'GET',
+        params: {
+          item,
+        } as DataboxListFindItemIndexParam,
+      }
+    );
     return response.data!.index;
   }
 }
 
 export const createListClient = (
-  moduleClientConfig: ModuleClientConfig,
-  listClientConfig: ListClientConfig
-): ListClient => new ListClient(moduleClientConfig, listClientConfig);
+  moduleClientConfig: DataboxModuleClientConfig,
+  listClientConfig: DataboxListClientConfig
+): DataboxListClient =>
+  new DataboxListClient(moduleClientConfig, listClientConfig);

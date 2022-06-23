@@ -1,51 +1,59 @@
 import { IBC } from '@ibootcloud/common-lib';
-export type RecordRow = {
+export type DataboxDBRecordRow = {
   _id: string;
   _created_time: Date;
   _updated_time: Date;
   _version: number;
-} & RecordContent;
-export type SUPPORT_RECORD_VAL = number | string | Date | boolean | object;
-export type RecordContent = Record<string, SUPPORT_RECORD_VAL>;
-export interface MongoUpdateObj {
-  $set?: RecordContent;
+} & DataboxDBRecordContent;
+export type DATABOX_DB_SUPPORT_RECORD_VAL =
+  | number
+  | string
+  | Date
+  | boolean
+  | object;
+export type DataboxDBRecordContent = Record<
+  string,
+  DATABOX_DB_SUPPORT_RECORD_VAL
+>;
+export interface DataboxDBMongoUpdateObj {
+  $set?: DataboxDBRecordContent;
   $unset?: Record<string, 1>;
 }
-export type RecordData = {
+export type DataboxDBRecordData = {
   _id?: string;
-} & RecordContent;
-export interface CreateTableBody {
+} & DataboxDBRecordContent;
+export interface DataboxDBCreateTableBody {
   table: string;
 }
-export interface RenameTableBody {
+export interface DataboxDBRenameTableBody {
   newTableName: string;
 }
-export type ListTableNameResponse = string[];
-export interface QueryRecordBody {
+export type DataboxDBListTableNameResponse = string[];
+export interface DataboxDBQueryRecordBody {
   query: object;
 }
-export interface QueryRecordResponse {
-  page: IBC.Page<RecordRow>;
+export interface DataboxDBQueryRecordResponse {
+  page: IBC.Page<DataboxDBRecordRow>;
 }
-export interface UpdateRecordByIdBody {
-  $set?: RecordContent;
+export interface DataboxDBUpdateRecordByIdBody {
+  $set?: DataboxDBRecordContent;
   $unset?: string[];
 }
-export interface UpdateRecordByIdResponse {
+export interface DataboxDBUpdateRecordByIdResponse {
   affected: number;
 }
-export interface InsertRecordBody {
-  record: RecordData;
+export interface DataboxDBInsertRecordBody {
+  record: DataboxDBRecordData;
 }
-export interface InsertRecordResponse {
+export interface DataboxDBInsertRecordResponse {
   success: boolean;
 }
-export interface RemoveRecordByIdResponse {
+export interface DataboxDBRemoveRecordByIdResponse {
   success: boolean;
 }
-export interface CountRecordsInTableResponse {
+export interface DataboxDBCountRecordsInTableResponse {
   count: number;
 }
-export interface ReadRecordByIdResponse {
-  record: RecordRow;
+export interface DataboxDBReadRecordByIdResponse {
+  record: DataboxDBRecordRow;
 }

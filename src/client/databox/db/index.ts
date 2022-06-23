@@ -1,21 +1,24 @@
 import { AxiosBaseClient } from '../../axios';
-import { ModuleClientConfig } from '../index';
+import { DataboxModuleClientConfig } from '../index';
 import {
   createDBTableClient,
-  DBTableClient,
-  DBTableClientConfig,
+  DataboxDBTableClient,
+  DataboxDBTableClientConfig,
 } from './table';
 
-export interface DBClientConfig {
+export * from './table';
+export * from './record';
+
+export interface DataboxDBClientConfig {
   instanceId: string;
 }
 
-export class DBClient {
-  moduleClientConfig: ModuleClientConfig;
+export class DataboxDBClient {
+  moduleClientConfig: DataboxModuleClientConfig;
   axios: AxiosBaseClient;
   constructor(
-    moduleClientConfig: ModuleClientConfig,
-    dbClientConfig: DBClientConfig
+    moduleClientConfig: DataboxModuleClientConfig,
+    dbClientConfig: DataboxDBClientConfig
   ) {
     this.moduleClientConfig = moduleClientConfig;
     this.axios = new AxiosBaseClient({
@@ -23,7 +26,7 @@ export class DBClient {
       ...dbClientConfig,
     });
   }
-  table(tableClientConfig: DBTableClientConfig): DBTableClient {
+  table(tableClientConfig: DataboxDBTableClientConfig): DataboxDBTableClient {
     return createDBTableClient(this.axios, tableClientConfig);
   }
 
@@ -49,6 +52,6 @@ export class DBClient {
 }
 
 export const createDBClient = (
-  moduleClientConfig: ModuleClientConfig,
-  dbClientConfig: DBClientConfig
-): DBClient => new DBClient(moduleClientConfig, dbClientConfig);
+  moduleClientConfig: DataboxModuleClientConfig,
+  dbClientConfig: DataboxDBClientConfig
+): DataboxDBClient => new DataboxDBClient(moduleClientConfig, dbClientConfig);

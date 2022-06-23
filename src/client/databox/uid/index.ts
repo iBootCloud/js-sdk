@@ -1,18 +1,18 @@
 import { AxiosBaseClient } from '../../axios';
-import { ModuleClientConfig } from '../index';
-import { IDType, NextUIDResponse } from '../../../types/databox/uid.dto';
+import { DataboxModuleClientConfig } from '../index';
+import { DataboxUIDType, DataboxUIDNextUIDResponse } from '../../../types';
 import { ObjectUtil } from '@ibootcloud/common-lib';
 
-export interface UIDClientConfig {
-  type?: IDType;
+export interface DataboxUIDClientConfig {
+  type?: DataboxUIDType;
 }
 
-export class UIDClient {
+export class DataboxUIDClient {
   axios: AxiosBaseClient;
-  idType: IDType;
+  idType: DataboxUIDType;
   constructor(
-    moduleClientConfig: ModuleClientConfig,
-    { type: idType = IDType.UUID }: UIDClientConfig = {}
+    moduleClientConfig: DataboxModuleClientConfig,
+    { type: idType = DataboxUIDType.UUID }: DataboxUIDClientConfig = {}
   ) {
     this.idType = idType;
     this.axios = new AxiosBaseClient({
@@ -26,10 +26,10 @@ export class UIDClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-23867249
    */
   async generate(
-    type?: IDType,
+    type?: DataboxUIDType,
     opt?: { size?: number; alphabet?: string }
   ): Promise<string> {
-    const response = await this.axios.request<NextUIDResponse>({
+    const response = await this.axios.request<DataboxUIDNextUIDResponse>({
       url: `/v1/uid/generate`,
       method: 'POST',
       params: ObjectUtil.removeEmpty({
@@ -42,6 +42,7 @@ export class UIDClient {
 }
 
 export const createUIDClient = (
-  moduleClientConfig: ModuleClientConfig,
-  uidClientConfig: UIDClientConfig = {}
-): UIDClient => new UIDClient(moduleClientConfig, uidClientConfig);
+  moduleClientConfig: DataboxModuleClientConfig,
+  uidClientConfig: DataboxUIDClientConfig = {}
+): DataboxUIDClient =>
+  new DataboxUIDClient(moduleClientConfig, uidClientConfig);

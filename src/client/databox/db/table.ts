@@ -1,21 +1,24 @@
 import { AxiosBaseClient } from '../../axios';
-import { createRecordClient } from './record';
-import { RecordData } from '../../../types/databox/db.dto';
+import { createRecordClient, DataboxDBRecordClient } from './record';
+import { DataboxDBRecordData } from '../../../types';
 
-export type DBTableClientConfig = {
+export type DataboxDBTableClientConfig = {
   table: string;
 };
 
-export class DBTableClient {
+export class DataboxDBTableClient {
   axios: AxiosBaseClient;
-  tableClientConfig: DBTableClientConfig;
+  tableClientConfig: DataboxDBTableClientConfig;
   table: string;
-  constructor(axios: AxiosBaseClient, tableClientConfig: DBTableClientConfig) {
+  constructor(
+    axios: AxiosBaseClient,
+    tableClientConfig: DataboxDBTableClientConfig
+  ) {
     this.axios = axios;
     this.tableClientConfig = tableClientConfig;
     this.table = tableClientConfig.table;
   }
-  record(recordData?: RecordData) {
+  record(recordData?: DataboxDBRecordData): DataboxDBRecordClient {
     return createRecordClient(this.axios, this.tableClientConfig, recordData);
   }
   /**
@@ -79,5 +82,5 @@ export class DBTableClient {
 
 export const createDBTableClient = (
   axios: AxiosBaseClient,
-  tableClientConfig: DBTableClientConfig
-): DBTableClient => new DBTableClient(axios, tableClientConfig);
+  tableClientConfig: DataboxDBTableClientConfig
+): DataboxDBTableClient => new DataboxDBTableClient(axios, tableClientConfig);

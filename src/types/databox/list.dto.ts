@@ -1,60 +1,60 @@
 export type ListItem = string;
-export interface RemoveNamespaceResponse {
+export interface DataboxListRemoveNamespaceResponse {
   affected: number;
 }
-export type GetListIdInNamespaceResponse = string[];
-export interface GetListItemParam {
+export type DataboxListGetListIdInNamespaceResponse = string[];
+export interface DataboxListGetListItemParam {
   start?: number;
   end?: number;
 }
-export type GetListItemResponse = ListItem[];
-export interface SetListBody {
+export type DataboxListGetListItemResponse = ListItem[];
+export interface DataboxListSetListBody {
   list: ListItem[];
   expiredTime?: string;
   ttl?: number;
 }
-export interface RemoveListsBody {
+export interface DataboxListRemoveListsBody {
   listId: string[];
 }
-export interface RemoveListResponse {
+export interface DataboxListRemoveListResponse {
   affected: number;
 }
-export interface ExpireListsBody {
+export interface DataboxListExpireListsBody {
   listId?: string[];
   expiredTime?: string;
   ttl?: number;
 }
-export enum AddItemsType {
+export enum DataboxListAddItemsType {
   APPEND = 'APPEND',
   PREPEND = 'PREPEND',
 }
-export interface AddItemsBody {
+export interface DataboxListAddItemsBody {
   items: ListItem[];
-  type: AddItemsType;
+  type: DataboxListAddItemsType;
 }
-export interface AddItemsResponse {
+export interface DataboxListAddItemsResponse {
   total: number;
 }
-export enum RemoveItemsType {
+export enum DataboxListRemoveItemsType {
   HEAD = 'HEAD',
   TAIL = 'TAIL',
   EQUAL = 'EQUAL',
 }
-export interface RemoveItemsBody {
+export interface DataboxListRemoveItemsBody {
   count?: number;
   item?: ListItem;
-  type: RemoveItemsType;
+  type: DataboxListRemoveItemsType;
 }
-export interface RemoveItemsResponse {
+export interface DataboxListRemoveItemsResponse {
   items?: ListItem[];
   affected?: number;
 }
-export interface UpdateItemByIndexBody {
+export interface DataboxListUpdateItemByIndexBody {
   item: ListItem;
 }
-export interface FindItemIndexParam {
+export interface DataboxListFindItemIndexParam {
   item: ListItem;
 }
-export interface FindItemIndexResponse {
+export interface DataboxListFindItemIndexResponse {
   index: number;
 }

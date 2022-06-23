@@ -1,15 +1,15 @@
-export enum IDType {
+export enum DataboxUIDType {
   INC_INT = 1,
   NANOID = 2,
   UUID = 3,
   OBJECT_ID = 4,
 }
-export interface NextUIDParam {
-  type?: IDType;
+export interface DataboxUIDNextUIDParam {
+  type?: DataboxUIDType;
   alphabet?: string;
   size?: number;
 }
-export interface NextUIDResponse {
+export interface DataboxUIDNextUIDResponse {
   uid: string;
-  type: IDType;
+  type: DataboxUIDType;
 }

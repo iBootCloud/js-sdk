@@ -13,9 +13,9 @@ import {
   dayjs,
   LANG,
 } from '@ibootcloud/common-lib';
-import { ENV, Service, getBaseURL } from '../constants';
+import { ENV, IBCService, getBaseURL } from '../constants';
 
-export interface ClientLogAdapter {
+export interface IBCClientLogAdapter {
   error: (...msg: any) => void;
   warn: (...msg: any) => void;
   info: (...msg: any) => void;
@@ -24,7 +24,7 @@ export interface ClientLogAdapter {
 }
 
 // 默认的控制台打印日志适配器
-class ConsoleLogAdapter implements ClientLogAdapter {
+class ConsoleLogAdapter implements IBCClientLogAdapter {
   debug(...msg: any): void {
     console.debug(msg);
   }
@@ -64,8 +64,8 @@ interface CreateAxiosClientConfig {
   accessToken?: string;
   env: ENV;
   timeout: number;
-  service: Service;
-  logAdapter?: ClientLogAdapter;
+  service: IBCService;
+  logAdapter?: IBCClientLogAdapter;
   baseUrl?: string;
   throwOnFail: boolean;
 }
@@ -73,7 +73,7 @@ interface CreateAxiosClientConfig {
 // 组合配置并创建Axios客户端
 const createAxiosInstance = (
   opt: CreateAxiosClientConfig
-): { axios: AxiosInstance; logAdapter: ClientLogAdapter } => {
+): { axios: AxiosInstance; logAdapter: IBCClientLogAdapter } => {
   const {
     instanceId,
     timeout,

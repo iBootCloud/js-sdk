@@ -1,41 +1,54 @@
 import { AxiosBaseClient } from '../../axios';
-import { CreateModuleClientConfig } from '../index';
-import { createDBTableClient, DBTableClientConfig } from './table';
+import { ModuleClientConfig } from '../index';
+import {
+  createDBTableClient,
+  DBTableClient,
+  DBTableClientConfig,
+} from './table';
 
 export interface DBClientConfig {
   instanceId: string;
 }
 
+export class DBClient {
+  moduleClientConfig: ModuleClientConfig;
+  axios: AxiosBaseClient;
+  constructor(
+    moduleClientConfig: ModuleClientConfig,
+    dbClientConfig: DBClientConfig
+  ) {
+    this.moduleClientConfig = moduleClientConfig;
+    this.axios = new AxiosBaseClient({
+      ...moduleClientConfig,
+      ...dbClientConfig,
+    });
+  }
+  table(tableClientConfig: DBTableClientConfig): DBTableClient {
+    return createDBTableClient(this.axios, tableClientConfig);
+  }
+
+  /**
+   * 初始化DB实例
+   */
+  async initInstance(): Promise<void> {
+    await this.axios.request<void>({
+      url: `/v1/db/instance/init`,
+      method: 'POST',
+    });
+  }
+
+  /**
+   * 移除DB实例
+   */
+  async removeInstance(): Promise<void> {
+    await this.axios.request<void>({
+      url: `/v1/db/instance`,
+      method: 'DELETE',
+    });
+  }
+}
+
 export const createDBClient = (
-  moduleClientConfig: CreateModuleClientConfig,
+  moduleClientConfig: ModuleClientConfig,
   dbClientConfig: DBClientConfig
-) => {
-  const axios = new AxiosBaseClient({
-    ...moduleClientConfig,
-    ...dbClientConfig,
-  });
-  return {
-    table: (tableClientConfig?: DBTableClientConfig) =>
-      createDBTableClient(axios, tableClientConfig),
-
-    /**
-     * 初始化DB实例
-     */
-    initInstance: async (): Promise<void> => {
-      await axios.request<void>({
-        url: `/v1/db/instance/init`,
-        method: 'POST',
-      });
-    },
-
-    /**
-     * 移除DB实例
-     */
-    removeInstance: async (): Promise<void> => {
-      await axios.request<void>({
-        url: `/v1/db/instance`,
-        method: 'DELETE',
-      });
-    },
-  };
-};
+): DBClient => new DBClient(moduleClientConfig, dbClientConfig);

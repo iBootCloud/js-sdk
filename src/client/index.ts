@@ -1,9 +1,9 @@
 import { LANG } from '@ibootcloud/common-lib';
-import { createDataboxClient } from './databox';
+import { createDataboxClient, DataboxClient } from './databox';
 import { ENV } from '../constants';
 import { ClientLogAdapter } from './axios';
 
-export interface CreateServiceClientConfig {
+export interface ServiceClientConfig {
   // 当前的i18n语言
   lang: LANG;
   // IBC的应用请求密钥
@@ -21,32 +21,32 @@ export interface CreateServiceClientConfig {
   throwOnFail: boolean;
 }
 
-export const createClient = (
-  rootClientConfig: {
-    lang?: LANG;
-    apiKey?: string;
-    accessToken?: string;
-    env?: ENV;
-    timeout?: number;
-    logAdapter?: ClientLogAdapter;
-    throwOnFail?: boolean;
-  } = {}
-) => {
-  const {
-    lang = LANG.EN,
-    env = ENV.PRODUCTION,
-    timeout = 10000,
-    throwOnFail = true,
-  } = rootClientConfig;
-  const serviceClientConfig: CreateServiceClientConfig = {
-    ...rootClientConfig,
-    lang,
-    env,
-    timeout,
-    throwOnFail,
-  };
-  return {
-    databox: (param?: CreateServiceClientConfig) =>
-      createDataboxClient({ ...serviceClientConfig, ...param }),
-  };
-};
+export interface RootClientConfig {
+  lang?: LANG;
+  apiKey?: string;
+  accessToken?: string;
+  env?: ENV;
+  timeout?: number;
+  logAdapter?: ClientLogAdapter;
+  throwOnFail?: boolean;
+}
+
+export class IBCClient {
+  serviceClientConfig: ServiceClientConfig;
+  constructor(cfg: RootClientConfig = {}) {
+    const {
+      lang = LANG.EN,
+      env = ENV.PRODUCTION,
+      timeout = 10000,
+      throwOnFail = true,
+    } = cfg;
+    this.serviceClientConfig = { ...cfg, lang, env, timeout, throwOnFail };
+  }
+
+  databox(param?: ServiceClientConfig): DataboxClient {
+    return createDataboxClient({ ...this.serviceClientConfig, ...param });
+  }
+}
+
+export const createClient = (cfg?: RootClientConfig): IBCClient =>
+  new IBCClient(cfg);

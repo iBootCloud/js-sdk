@@ -2,6 +2,7 @@ import { LANG } from '@ibootcloud/common-lib';
 import { createDataboxClient, DataboxClient } from './databox';
 import { ENV } from '../constants';
 import { IBCClientLogAdapter } from './axios';
+import { createMicofunClient, MicofunClient } from './micofun';
 
 export * from './databox';
 export * from './axios';
@@ -48,6 +49,10 @@ export class IBCClient {
 
   databox(param?: IBCServiceClientConfig): DataboxClient {
     return createDataboxClient({ ...this.serviceClientConfig, ...param });
+  }
+
+  micofun(param?: IBCServiceClientConfig): MicofunClient {
+    return createMicofunClient({ ...this.serviceClientConfig, ...param });
   }
 }
 

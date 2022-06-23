@@ -6,6 +6,8 @@ export enum IDType {
 }
 export interface NextUIDParam {
   type?: IDType;
+  alphabet?: string;
+  size?: number;
 }
 export interface NextUIDResponse {
   uid: string;

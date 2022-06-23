@@ -1,6 +1,7 @@
 import { AxiosBaseClient } from '../../axios';
 import { CreateModuleClientConfig } from '../index';
 import { IDType, NextUIDResponse } from '../../../types/databox/uid.dto';
+import { ObjectUtil } from '@ibootcloud/common-lib';
 
 export interface UIDClientConfig {
   type?: IDType;
@@ -19,18 +20,18 @@ export const createUIDClient = (
      * POST /v1/uid/generate
      * 接口ID：23867249
      * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-23867249
-     * @param type ID类型：
-     * 1: 自增ID
-     * 2: NanoID
-     * 3: UUID
      */
-    generate: async (type?: IDType): Promise<string> => {
+    generate: async (
+      type?: IDType,
+      opt?: { size?: number; alphabet?: string }
+    ): Promise<string> => {
       const response = await axios.request<NextUIDResponse>({
         url: `/v1/uid/generate`,
         method: 'POST',
-        params: {
+        params: ObjectUtil.removeEmpty({
           type: type ?? idType,
-        },
+          ...opt,
+        }),
       });
       return response.data!.uid;
     },

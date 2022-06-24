@@ -8,26 +8,6 @@ import { AxiosRequestConfig } from 'axios';
 export * from './databox';
 export * from './axios';
 
-export interface IBCServiceClientConfig {
-  // 当前的i18n语言
-  lang: LANG;
-  // IBC的应用请求密钥
-  apiKey?: string;
-  accessToken?: string;
-  // 请求环境
-  env: ENV;
-  // 请求超时
-  timeout: number;
-  // client使用的日志适配器
-  logAdapter?: IBCClientLogAdapter;
-  // 覆盖内部自带的服务域名
-  baseUrl?: string;
-  // 请求不成功时(code !== 1)是否抛出错误，错误信息为错误码
-  throwOnFail: boolean;
-  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
-  responseInterceptor?: (response: any) => any;
-}
-
 export interface IBCClientConfig {
   lang?: LANG;
   apiKey?: string;
@@ -39,6 +19,22 @@ export interface IBCClientConfig {
   requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
   responseInterceptor?: (response: any) => any;
 }
+
+export type IBCServiceClientConfig = IBCClientConfig & {
+  // 当前的i18n语言
+  lang: LANG;
+  // 请求环境
+  env: ENV;
+  // 请求超时
+  timeout: number;
+  // 请求不成功时(code !== 1)是否抛出错误，错误信息为错误码
+  throwOnFail: boolean;
+};
+
+export type AppendIBCServiceClientConfig = IBCClientConfig & {
+  // 覆盖内部自带的服务域名
+  baseUrl?: string;
+};
 
 export class IBCClient {
   serviceClientConfig: IBCServiceClientConfig;
@@ -52,11 +48,11 @@ export class IBCClient {
     this.serviceClientConfig = { ...cfg, lang, env, timeout, throwOnFail };
   }
 
-  databox(param?: IBCServiceClientConfig): DataboxClient {
+  databox(param?: AppendIBCServiceClientConfig): DataboxClient {
     return createDataboxClient({ ...this.serviceClientConfig, ...param });
   }
 
-  micofun(param?: IBCServiceClientConfig): MicofunClient {
+  micofun(param?: AppendIBCServiceClientConfig): MicofunClient {
     return createMicofunClient({ ...this.serviceClientConfig, ...param });
   }
 }

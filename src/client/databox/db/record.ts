@@ -47,7 +47,7 @@ export class DataboxDBRecordClient {
    */
   async insert(
     record: DataboxDBRecordData = this.recordData
-  ): Promise<boolean> {
+  ): Promise<DataboxDBRecordRow> {
     const response = await this.axios.request<
       DataboxDBInsertRecordResponse,
       DataboxDBInsertRecordBody
@@ -56,7 +56,7 @@ export class DataboxDBRecordClient {
       method: 'POST',
       data: { record },
     });
-    return response!.data!.success;
+    return response!.data!.record;
   }
 
   /**

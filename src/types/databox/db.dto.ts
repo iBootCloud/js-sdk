@@ -46,7 +46,7 @@ export interface DataboxDBInsertRecordBody {
   record: DataboxDBRecordData;
 }
 export interface DataboxDBInsertRecordResponse {
-  success: boolean;
+  record: DataboxDBRecordRow;
 }
 export interface DataboxDBRemoveRecordByIdResponse {
   success: boolean;

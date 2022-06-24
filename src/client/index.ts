@@ -3,6 +3,7 @@ import { createDataboxClient, DataboxClient } from './databox';
 import { ENV } from '../constants';
 import { IBCClientLogAdapter } from './axios';
 import { createMicofunClient, MicofunClient } from './micofun';
+import { AxiosRequestConfig } from 'axios';
 
 export * from './databox';
 export * from './axios';
@@ -23,6 +24,8 @@ export interface IBCServiceClientConfig {
   baseUrl?: string;
   // 请求不成功时(code !== 1)是否抛出错误，错误信息为错误码
   throwOnFail: boolean;
+  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
+  responseInterceptor?: (response: any) => any;
 }
 
 export interface IBCClientConfig {
@@ -33,6 +36,8 @@ export interface IBCClientConfig {
   timeout?: number;
   logAdapter?: IBCClientLogAdapter;
   throwOnFail?: boolean;
+  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
+  responseInterceptor?: (response: any) => any;
 }
 
 export class IBCClient {

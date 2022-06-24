@@ -14,6 +14,7 @@ import {
   DataboxUIDClient,
   DataboxUIDClientConfig,
 } from './uid';
+import { AxiosRequestConfig } from 'axios';
 
 export * from './db';
 export * from './kv';
@@ -30,6 +31,8 @@ export interface DataboxModuleClientConfig {
   logAdapter?: IBCClientLogAdapter;
   baseUrl?: string;
   throwOnFail: boolean;
+  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
+  responseInterceptor?: (response: any) => any;
 }
 
 export class DataboxClient {

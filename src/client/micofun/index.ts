@@ -5,6 +5,7 @@ import { IBCClientLogAdapter } from '../axios';
 import { createNotifyClient, MicofunNotifyClient } from './notify';
 import { createUrlClient, MicofunUrlClient } from './url';
 import { createOTPClient, MicofunOTPClient } from './otp';
+import { AxiosRequestConfig } from 'axios';
 
 export interface MicofunModuleClientConfig {
   lang: LANG;
@@ -16,6 +17,8 @@ export interface MicofunModuleClientConfig {
   logAdapter?: IBCClientLogAdapter;
   baseUrl?: string;
   throwOnFail: boolean;
+  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
+  responseInterceptor?: (response: any) => any;
 }
 
 export class MicofunClient {

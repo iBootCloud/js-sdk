@@ -47,13 +47,15 @@ class ConsoleLogAdapter implements IBCClientLogAdapter {
 }
 
 // 请求之前添加时间戳
-const timestampInterceptor = (config: any) => {
-  config.headers[IBCHeader.TIMESTAMP_KEY] = dayjs().format(Formation.TIMESTAMP);
+const timestampInterceptor = (config: AxiosRequestConfig) => {
+  config.headers![IBCHeader.TIMESTAMP_KEY] = dayjs().format(
+    Formation.TIMESTAMP
+  );
   return config;
 };
 // 请求之前添加Nonce
-const nonceInterceptor = (config: any) => {
-  config.headers[IBCHeader.NONCE_KEY] = IdUtil.nextUUIDv4();
+const nonceInterceptor = (config: AxiosRequestConfig) => {
+  config.headers![IBCHeader.NONCE_KEY] = IdUtil.nextUUIDv4();
   return config;
 };
 
@@ -68,6 +70,8 @@ interface CreateAxiosClientConfig {
   logAdapter?: IBCClientLogAdapter;
   baseUrl?: string;
   throwOnFail: boolean;
+  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
+  responseInterceptor?: (response: any) => any;
 }
 
 // 组合配置并创建Axios客户端
@@ -118,7 +122,11 @@ const createAxiosInstance = (
 
   inst.interceptors.request.use(timestampInterceptor);
   inst.interceptors.request.use(nonceInterceptor);
+  opt?.requestInterceptor &&
+    inst.interceptors.request.use(opt.requestInterceptor);
   inst.interceptors.response.use(respSchemaInterceptor);
+  opt?.responseInterceptor &&
+    inst.interceptors.response.use(opt.responseInterceptor);
 
   return { axios: inst, logAdapter };
 };

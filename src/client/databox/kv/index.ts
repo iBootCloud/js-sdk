@@ -73,7 +73,7 @@ export class DataboxKVClient {
     const response = await this.axios.request<DataboxKVGetKVResponse>({
       url: `/v1/kv/namespace/${this.namespace}/values`,
       method: 'GET',
-      params: ObjectUtil.removeEmpty({ keys }),
+      params: ObjectUtil.removeUndefined({ keys }),
     });
     return response.data as DataboxKVGetKVResponse;
   }
@@ -101,7 +101,7 @@ export class DataboxKVClient {
     await this.axios.request<void, DataboxKVSaveKVBody>({
       url: `/v1/kv/namespace/${this.namespace}/values`,
       method: 'PUT',
-      data: ObjectUtil.removeEmpty({
+      data: ObjectUtil.removeUndefined({
         kv,
         ttl: expire?.ttl,
         expiredTime: expire?.expiredTime
@@ -136,7 +136,7 @@ export class DataboxKVClient {
     await this.axios.request<void, DataboxKVExpireKeysBody>({
       url: `/v1/kv/namespace/${this.namespace}/expire`,
       method: 'POST',
-      data: ObjectUtil.removeEmpty({
+      data: ObjectUtil.removeUndefined({
         key: keys,
         ttl: expire?.ttl,
         expiredTime: expire?.expiredTime
@@ -154,7 +154,7 @@ export class DataboxKVClient {
     const resp = await this.axios.request<DataboxKVIncreaseValueResponse>({
       url: `/v1/kv/namespace/${this.namespace}/value/${key}/increase`,
       method: 'POST',
-      params: ObjectUtil.removeEmpty({
+      params: ObjectUtil.removeUndefined({
         step,
       }),
     });
@@ -169,7 +169,7 @@ export class DataboxKVClient {
     const resp = await this.axios.request<DataboxKVDecreaseValueResponse>({
       url: `/v1/kv/namespace/${this.namespace}/value/${key}/decrease`,
       method: 'POST',
-      params: ObjectUtil.removeEmpty({
+      params: ObjectUtil.removeUndefined({
         step,
       }),
     });

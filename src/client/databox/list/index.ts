@@ -82,7 +82,7 @@ export class DataboxListClient {
     const response = await this.axios.request<DataboxListGetListItemResponse>({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}/items`,
       method: 'GET',
-      params: ObjectUtil.removeEmpty(opt) as DataboxListGetListItemParam,
+      params: ObjectUtil.removeUndefined(opt) as DataboxListGetListItemParam,
     });
     return response.data as DataboxListGetListItemResponse;
   }
@@ -113,7 +113,7 @@ export class DataboxListClient {
     await this.axios.request<void, DataboxListSetListBody>({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}`,
       method: 'PUT',
-      data: ObjectUtil.removeEmpty({
+      data: ObjectUtil.removeUndefined({
         list,
         ttl: expire?.ttl,
         expiredTime: expire?.expiredTime
@@ -149,7 +149,7 @@ export class DataboxListClient {
     await this.axios.request<void, DataboxListExpireListsBody>({
       url: `/v1/list/namespace/${this.namespace}/expire`,
       method: 'POST',
-      data: ObjectUtil.removeEmpty({
+      data: ObjectUtil.removeUndefined({
         listId,
         ttl: expire?.ttl,
         expiredTime: expire?.expiredTime

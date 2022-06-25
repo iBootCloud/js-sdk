@@ -98,7 +98,7 @@ export class MicofunUrlShortenClient {
       {
         url: `/v1/url/shorten/list`,
         method: 'GET',
-        params: ObjectUtil.removeEmpty({
+        params: ObjectUtil.removeUndefined({
           query,
         }),
       },

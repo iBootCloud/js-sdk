@@ -32,7 +32,7 @@ export class DataboxUIDClient {
     const response = await this.axios.request<DataboxUIDNextUIDResponse>({
       url: `/v1/uid/generate`,
       method: 'POST',
-      params: ObjectUtil.removeEmpty({
+      params: ObjectUtil.removeUndefined({
         type: type ?? this.idType,
         ...opt,
       }),

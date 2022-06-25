@@ -28,7 +28,7 @@ export class MicofunOTPClient {
     >({
       url: `/v1/otp/generate`,
       method: 'POST',
-      data: ObjectUtil.removeEmpty(params),
+      data: ObjectUtil.removeUndefined(params),
     });
     return response.data!.passCode;
   }
@@ -46,7 +46,7 @@ export class MicofunOTPClient {
     >({
       url: `/v1/otp/validate`,
       method: 'POST',
-      data: ObjectUtil.removeEmpty(params),
+      data: ObjectUtil.removeUndefined(params),
     });
     return response.data!.pass;
   }

@@ -28,7 +28,7 @@ export class MicofunNotifyClient {
     await this.axios.request<void, MicofunNotifySendSMSBody>({
       url: `/v1/notify/sms`,
       method: 'POST',
-      data: ObjectUtil.removeEmpty({
+      data: ObjectUtil.removeUndefined({
         template,
         target,
         templateParams,
@@ -46,7 +46,7 @@ export class MicofunNotifyClient {
     await this.axios.request<void, MicofunNotifySendEMailBody>({
       url: `/v1/notify/email`,
       method: 'POST',
-      data: ObjectUtil.removeEmpty(params),
+      data: ObjectUtil.removeUndefined(params),
     });
   }
 }

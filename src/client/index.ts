@@ -4,6 +4,11 @@ import { ENV } from '../constants';
 import { IBCClientLogAdapter } from './axios';
 import { createMicofunClient, MicofunClient } from './micofun';
 import { AxiosRequestConfig } from 'axios';
+import {
+  createSearchableClient,
+  SearchableClient,
+  SearchableClientConfig,
+} from './searchable';
 
 export * from './databox';
 export * from './axios';
@@ -54,6 +59,12 @@ export class IBCClient {
 
   micofun(param?: AppendIBCServiceClientConfig): MicofunClient {
     return createMicofunClient({ ...this.serviceClientConfig, ...param });
+  }
+
+  searchable(
+    param: AppendIBCServiceClientConfig & SearchableClientConfig
+  ): SearchableClient {
+    return createSearchableClient({ ...this.serviceClientConfig, ...param });
   }
 }
 

@@ -10,6 +10,7 @@ export const getBaseURL = (
         [IBCService.DATABOX]: `https://api.databox.ibootcloud.com`,
         [IBCService.MICOFUN]: `https://api.micofun.ibootcloud.com`,
         [IBCService.SEARCHABLE]: `https://api.searchable.ibootcloud.com`,
+        [IBCService.EVENTBURG]: `https://api.eventburg.ibootcloud.com`,
       };
     case ENV.TEST:
       return {
@@ -17,6 +18,7 @@ export const getBaseURL = (
         [IBCService.DATABOX]: `https://api.databox.ibootcloud.com/test`,
         [IBCService.MICOFUN]: `https://api.micofun.ibootcloud.com/test`,
         [IBCService.SEARCHABLE]: `https://api.searchable.ibootcloud.com/test`,
+        [IBCService.EVENTBURG]: `https://api.eventburg.ibootcloud.com/test`,
       };
     case ENV.DEVELOPMENT:
       return {
@@ -24,6 +26,7 @@ export const getBaseURL = (
         [IBCService.DATABOX]: `http://127.0.0.1:9000`,
         [IBCService.MICOFUN]: `http://127.0.0.1:9000`,
         [IBCService.SEARCHABLE]: `http://127.0.0.1:9000`,
+        [IBCService.EVENTBURG]: `http://127.0.0.1:9000`,
       };
   }
 };

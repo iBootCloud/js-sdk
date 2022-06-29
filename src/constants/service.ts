@@ -3,6 +3,7 @@ export enum IBCService {
   DATABOX = 'Databox',
   MICOFUN = 'Micofun',
   SEARCHABLE = 'Searchable',
+  EVENTBURG = 'Eventburg',
 }
 
 export enum ENV {

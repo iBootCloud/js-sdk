@@ -9,6 +9,11 @@ import {
   SearchableClient,
   SearchableClientConfig,
 } from './searchable';
+import {
+  createEventburgClient,
+  EventburgClient,
+  EventburgClientConfig,
+} from './eventburg';
 
 export * from './databox';
 export * from './axios';
@@ -65,6 +70,12 @@ export class IBCClient {
     param: AppendIBCServiceClientConfig & SearchableClientConfig
   ): SearchableClient {
     return createSearchableClient({ ...this.serviceClientConfig, ...param });
+  }
+
+  eventburg(
+    param: AppendIBCServiceClientConfig & EventburgClientConfig
+  ): EventburgClient {
+    return createEventburgClient({ ...this.serviceClientConfig, ...param });
   }
 }
 

@@ -14,6 +14,7 @@ import {
   EventburgClient,
   EventburgClientConfig,
 } from './eventburg';
+import { createMedifyClient, MedifyClient } from './medify';
 
 export * from './databox';
 export * from './axios';
@@ -76,6 +77,10 @@ export class IBCClient {
     param: AppendIBCServiceClientConfig & EventburgClientConfig
   ): EventburgClient {
     return createEventburgClient({ ...this.serviceClientConfig, ...param });
+  }
+
+  medify(param?: AppendIBCServiceClientConfig): MedifyClient {
+    return createMedifyClient({ ...this.serviceClientConfig, ...param });
   }
 }
 

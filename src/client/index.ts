@@ -53,7 +53,7 @@ export class IBCClient {
     const {
       lang = LANG.EN,
       env = ENV.PRODUCTION,
-      timeout = 10000,
+      timeout = 30000,
       throwOnFail = true,
     } = cfg;
     this.serviceClientConfig = { ...cfg, lang, env, timeout, throwOnFail };

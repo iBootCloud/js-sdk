@@ -16,8 +16,12 @@ import {
 } from './eventburg';
 import { createMedifyClient, MedifyClient } from './medify';
 
-export * from './databox';
 export * from './axios';
+export * from './databox';
+export * from './micofun';
+export * from './searchable';
+export * from './eventburg';
+export * from './medify';
 
 export interface IBCClientConfig {
   lang?: LANG;

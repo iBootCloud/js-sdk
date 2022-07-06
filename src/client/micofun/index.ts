@@ -6,6 +6,7 @@ import { createNotifyClient, MicofunNotifyClient } from './notify';
 import { createUrlClient, MicofunUrlClient } from './url';
 import { createOTPClient, MicofunOTPClient } from './otp';
 import { AxiosRequestConfig } from 'axios';
+import { createTokenClient, MicofunTokenClient } from './token';
 
 export interface MicofunModuleClientConfig {
   lang: LANG;
@@ -37,6 +38,9 @@ export class MicofunClient {
   }
   otp(): MicofunOTPClient {
     return createOTPClient(this.moduleClientConfig);
+  }
+  token(): MicofunTokenClient {
+    return createTokenClient(this.moduleClientConfig);
   }
 }
 

@@ -15,6 +15,7 @@ export type MicofunOTPGenerateOTPResponse = {
 export interface MicofunOTPValidateOTPBody {
   identifier: string;
   otp: string;
+  removeOnPass?: boolean;
 }
 export type MicofunOTPValidateOTPResponse = {
   pass: boolean;

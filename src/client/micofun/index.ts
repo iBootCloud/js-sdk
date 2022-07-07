@@ -12,6 +12,11 @@ import {
 import { AxiosRequestConfig } from 'axios';
 import { createTokenClient, MicofunTokenClient } from './token';
 
+export * from './otp';
+export * from './url';
+export * from './token';
+export * from './notify';
+
 export interface MicofunModuleClientConfig {
   lang: LANG;
   apiKey?: string;

@@ -19,6 +19,8 @@ export interface MedifyModuleClientConfig {
   responseInterceptor?: (response: any) => any;
 }
 
+export * from './img';
+
 export class MedifyClient {
   moduleClientConfig: MedifyModuleClientConfig;
   constructor(serviceClientConfig: IBCServiceClientConfig) {

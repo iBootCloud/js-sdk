@@ -6,6 +6,8 @@ import {
 } from './shorten';
 import { AxiosBaseClient } from '../../axios';
 
+export * from './shorten';
+
 export class MicofunUrlClient {
   moduleClientConfig: MicofunModuleClientConfig;
   axios: AxiosBaseClient;

@@ -8,11 +8,21 @@ import {
   MicofunOTPValidateOTPResponse,
 } from '../../../types';
 
+export interface MicofunOTPClientConfig {
+  instanceId: string;
+}
+
 export class MicofunOTPClient {
+  otpClientConfig: MicofunOTPClientConfig;
   axios: AxiosBaseClient;
-  constructor(moduleClientConfig: MicofunModuleClientConfig) {
+  constructor(
+    otpClientConfig: MicofunOTPClientConfig,
+    moduleClientConfig: MicofunModuleClientConfig
+  ) {
+    this.otpClientConfig = otpClientConfig;
     this.axios = new AxiosBaseClient({
       ...moduleClientConfig,
+      ...otpClientConfig,
     });
   }
   /**
@@ -53,5 +63,6 @@ export class MicofunOTPClient {
 }
 
 export const createOTPClient = (
-  moduleClientConfig: MicofunModuleClientConfig
-): MicofunOTPClient => new MicofunOTPClient(moduleClientConfig);
+  moduleClientConfig: MicofunModuleClientConfig,
+  cfg: MicofunOTPClientConfig
+): MicofunOTPClient => new MicofunOTPClient(cfg, moduleClientConfig);

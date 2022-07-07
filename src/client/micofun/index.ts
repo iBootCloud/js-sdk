@@ -4,7 +4,11 @@ import { ENV, IBCService } from '../../constants';
 import { IBCClientLogAdapter } from '../axios';
 import { createNotifyClient, MicofunNotifyClient } from './notify';
 import { createUrlClient, MicofunUrlClient } from './url';
-import { createOTPClient, MicofunOTPClient } from './otp';
+import {
+  createOTPClient,
+  MicofunOTPClient,
+  MicofunOTPClientConfig,
+} from './otp';
 import { AxiosRequestConfig } from 'axios';
 import { createTokenClient, MicofunTokenClient } from './token';
 
@@ -36,8 +40,8 @@ export class MicofunClient {
   url(): MicofunUrlClient {
     return createUrlClient(this.moduleClientConfig);
   }
-  otp(): MicofunOTPClient {
-    return createOTPClient(this.moduleClientConfig);
+  otp(otpClientConfig: MicofunOTPClientConfig): MicofunOTPClient {
+    return createOTPClient(this.moduleClientConfig, otpClientConfig);
   }
   token(): MicofunTokenClient {
     return createTokenClient(this.moduleClientConfig);

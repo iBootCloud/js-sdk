@@ -4,6 +4,12 @@ export interface SearchableInstanceSettingTypoTolerance {
   disableOnWords?: string[];
   disableOnAttributes?: string[];
 }
+export interface SearchableInstanceSettingFacet {
+  maxValuesPerFacet?: number;
+}
+export interface SearchableInstanceSettingPagination {
+  maxTotalHits?: number;
+}
 export interface SearchableInstanceSettings {
   idField?: string;
   rankingRules?: string[];
@@ -14,6 +20,8 @@ export interface SearchableInstanceSettings {
   stopWords?: string[];
   searchableAttributes?: string[];
   displayedAttributes?: string[];
+  faceting?: SearchableInstanceSettingFacet;
+  pagination?: SearchableInstanceSettingPagination;
   typoTolerance?: SearchableInstanceSettingTypoTolerance;
 }
 export interface SearchableInstanceInfo {
@@ -37,15 +45,15 @@ export interface SearchableSearchConfig {
   highlight?: SearchableHighlight;
   crop?: SearchableCrop;
   filter?: string;
-  facetsDistribution?: string[];
+  facets?: string[];
   attributesToRetrieve?: string[];
-  matchesDetail?: boolean;
+  showMatchesPosition?: boolean;
   sort?: string[];
 }
 export interface SearchableSearchResult {
   page: IBC.Page<
     object & {
-      _matchesDetail?: Record<
+      _matchesPosition?: Record<
         string,
         Array<{
           start: number;
@@ -56,7 +64,7 @@ export interface SearchableSearchResult {
     }
   >;
   processingTimeMs: number;
-  facetsDistribution?: Record<string, Record<string, number>>;
+  facetDistribution?: Record<string, Record<string, number>>;
 }
 export interface SearchableSearchDocumentsBody {
   query?: string;

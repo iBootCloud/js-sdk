@@ -15,6 +15,11 @@ import {
   EventburgClientConfig,
 } from './eventburg';
 import { createMedifyClient, MedifyClient } from './medify';
+import {
+  createIdentityClient,
+  IdentityClient,
+  IdentityClientConfig,
+} from './identity';
 
 export * from './axios';
 
@@ -23,6 +28,7 @@ export * from './micofun';
 export * from './searchable';
 export * from './eventburg';
 export * from './medify';
+export * from './identity';
 
 export interface IBCClientConfig {
   lang?: LANG;
@@ -54,6 +60,7 @@ export type AppendIBCServiceClientConfig = IBCClientConfig & {
 
 export class IBCClient {
   serviceClientConfig: IBCServiceClientConfig;
+
   constructor(cfg: IBCClientConfig = {}) {
     const {
       lang = LANG.EN,
@@ -61,31 +68,58 @@ export class IBCClient {
       timeout = 30000,
       throwOnFail = true,
     } = cfg;
-    this.serviceClientConfig = { ...cfg, lang, env, timeout, throwOnFail };
+    this.serviceClientConfig = {
+      ...cfg,
+      lang,
+      env,
+      timeout,
+      throwOnFail,
+    };
   }
 
   databox(param?: AppendIBCServiceClientConfig): DataboxClient {
-    return createDataboxClient({ ...this.serviceClientConfig, ...param });
+    return createDataboxClient({
+      ...this.serviceClientConfig,
+      ...param,
+    });
   }
 
   micofun(param?: AppendIBCServiceClientConfig): MicofunClient {
-    return createMicofunClient({ ...this.serviceClientConfig, ...param });
+    return createMicofunClient({
+      ...this.serviceClientConfig,
+      ...param,
+    });
   }
 
   searchable(
     param: AppendIBCServiceClientConfig & SearchableClientConfig
   ): SearchableClient {
-    return createSearchableClient({ ...this.serviceClientConfig, ...param });
+    return createSearchableClient({
+      ...this.serviceClientConfig,
+      ...param,
+    });
   }
 
   eventburg(
     param: AppendIBCServiceClientConfig & EventburgClientConfig
   ): EventburgClient {
-    return createEventburgClient({ ...this.serviceClientConfig, ...param });
+    return createEventburgClient({
+      ...this.serviceClientConfig,
+      ...param,
+    });
   }
 
   medify(param?: AppendIBCServiceClientConfig): MedifyClient {
     return createMedifyClient({ ...this.serviceClientConfig, ...param });
+  }
+
+  identity(
+    param: AppendIBCServiceClientConfig & IdentityClientConfig
+  ): IdentityClient {
+    return createIdentityClient({
+      ...this.serviceClientConfig,
+      ...param,
+    });
   }
 }
 

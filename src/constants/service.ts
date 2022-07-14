@@ -5,6 +5,7 @@ export enum IBCService {
   SEARCHABLE = 'Searchable',
   EVENTBURG = 'Eventburg',
   MEDIFY = 'Medify',
+  IDENTITY = 'Identity',
 }
 
 export enum ENV {

@@ -13,6 +13,11 @@ export namespace IdentityProfile {
   }
 }
 
+export interface IdentityUserProfileAvatar {
+  thumbnail?: string;
+  origin?: string;
+}
+
 export interface IdentityUserProfileLocationCoordinates {
   latitude?: string;
   longitude?: string;
@@ -54,7 +59,7 @@ export interface IdentityUserProfileWithoutUID {
   email?: string;
   mobile?: string;
   displayName?: string;
-  avatarUrl?: string;
+  avatar?: IdentityUserProfileAvatar;
   tags?: string[];
   language?: LANG;
   location?: IdentityUserProfileLocation;

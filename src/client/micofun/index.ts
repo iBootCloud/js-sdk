@@ -1,4 +1,9 @@
-import { IBCServiceClientConfig } from '../index';
+import {
+  createGrantClient,
+  IBCServiceClientConfig,
+  MicofunGrantClient,
+  MicofunGrantClientConfig,
+} from '../index';
 import { LANG } from '@ibootcloud/common-lib';
 import { ENV, IBCService } from '../../constants';
 import { IBCClientLogAdapter } from '../axios';
@@ -16,6 +21,7 @@ export * from './otp';
 export * from './url';
 export * from './token';
 export * from './notify';
+export * from './grant';
 
 export interface MicofunModuleClientConfig {
   lang: LANG;
@@ -33,23 +39,32 @@ export interface MicofunModuleClientConfig {
 
 export class MicofunClient {
   moduleClientConfig: MicofunModuleClientConfig;
+
   constructor(serviceClientConfig: IBCServiceClientConfig) {
     this.moduleClientConfig = {
       ...serviceClientConfig,
       service: IBCService.MICOFUN,
     };
   }
+
   notify(): MicofunNotifyClient {
     return createNotifyClient(this.moduleClientConfig);
   }
+
   url(): MicofunUrlClient {
     return createUrlClient(this.moduleClientConfig);
   }
+
   otp(otpClientConfig: MicofunOTPClientConfig): MicofunOTPClient {
     return createOTPClient(this.moduleClientConfig, otpClientConfig);
   }
+
   token(): MicofunTokenClient {
     return createTokenClient(this.moduleClientConfig);
+  }
+
+  grant(cfg: MicofunGrantClientConfig): MicofunGrantClient {
+    return createGrantClient(this.moduleClientConfig, cfg);
   }
 }
 

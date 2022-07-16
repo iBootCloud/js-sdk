@@ -1,20 +1,6 @@
 import { AxiosBaseClient, PaginationOpt } from '../../axios';
 import { IdentityModuleClientConfig } from '../index';
-import {
-  IdentityCreateUserBody,
-  IdentityCreateUserResponse,
-  IdentityEditUserProfileBody,
-  IdentityGetSingleUserProfileParam,
-  IdentityGetSingleUserProfileResponse,
-  IdentityGetUserByIdentifierResponse,
-  IdentityRemoveUserBody,
-  IdentityRemoveUserResponse,
-  IdentitySearchUserProfileParam,
-  IdentitySearchUserProfileResponse,
-  IdentityUserIdentifierType,
-  IdentityUserProfile,
-  IdentityUserProfileWithoutUID,
-} from '../../../types';
+import { Identity } from '../../../types';
 import { IBC, ObjectUtil } from '@ibootcloud/common-lib';
 
 export class IdentityManageUserProfileClient {
@@ -34,16 +20,18 @@ export class IdentityManageUserProfileClient {
    * 接口ID：21397340
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397340
    */
-  async create(param: IdentityCreateUserBody): Promise<IdentityUserProfile> {
+  async create(
+    param: Identity.Profile.CreateUserBody
+  ): Promise<Identity.Profile.UserProfile> {
     const response = await this.axios.request<
-      IdentityCreateUserResponse,
-      IdentityCreateUserBody
+      Identity.Profile.CreateUserResponse,
+      Identity.Profile.CreateUserBody
     >({
       url: `/v1/manage/user/profile`,
       method: 'POST',
       data: ObjectUtil.removeNil(param),
     });
-    return response.data as IdentityUserProfile;
+    return response.data as Identity.Profile.UserProfile;
   }
 
   /**
@@ -54,9 +42,9 @@ export class IdentityManageUserProfileClient {
    */
   async edit(
     uid: string,
-    profile: IdentityUserProfileWithoutUID
+    profile: Identity.Profile.UserProfileWithoutUID
   ): Promise<void> {
-    await this.axios.request<void, IdentityEditUserProfileBody>({
+    await this.axios.request<void, Identity.Profile.EditUserProfileBody>({
       url: `/v1/manage/user/profile`,
       method: 'PATCH',
       data: { uid, profile: ObjectUtil.removeUndefined(profile) },
@@ -71,8 +59,8 @@ export class IdentityManageUserProfileClient {
    */
   async remove(uid: string[]): Promise<number> {
     const response = await this.axios.request<
-      IdentityRemoveUserResponse,
-      IdentityRemoveUserBody
+      Identity.Profile.RemoveUserResponse,
+      Identity.Profile.RemoveUserBody
     >({
       url: `/v1/manage/user/profile`,
       method: 'DELETE',
@@ -88,11 +76,11 @@ export class IdentityManageUserProfileClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-29257729
    */
   async search(
-    param: IdentitySearchUserProfileParam = {},
+    param: Identity.Profile.SearchUserProfileParam = {},
     opt?: PaginationOpt
-  ): Promise<IBC.Page<IdentityUserProfile>> {
+  ): Promise<IBC.Page<Identity.Profile.UserProfile>> {
     const response = await this.axios.request<
-      IdentitySearchUserProfileResponse
+      Identity.Profile.SearchUserProfileResponse
     >(
       {
         url: `/v1/manage/user/profile/search`,
@@ -112,10 +100,10 @@ export class IdentityManageUserProfileClient {
    */
   async matchUserByIdentifier(
     identifier: string,
-    identifierType?: IdentityUserIdentifierType
-  ): Promise<IdentityUserProfile> {
+    identifierType?: Identity.Profile.UserIdentifierType
+  ): Promise<Identity.Profile.UserProfile> {
     const response = await this.axios.request<
-      IdentityGetUserByIdentifierResponse
+      Identity.Profile.GetUserByIdentifierResponse
     >({
       url: `/v1/manage/user/profile/match/identifier`,
       method: 'GET',
@@ -124,7 +112,7 @@ export class IdentityManageUserProfileClient {
         identifierType,
       }),
     });
-    return response!.data as IdentityUserProfile;
+    return response!.data as Identity.Profile.UserProfile;
   }
 
   /**
@@ -134,16 +122,16 @@ export class IdentityManageUserProfileClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397346
    */
   async findOne(
-    param: IdentityGetSingleUserProfileParam
-  ): Promise<IdentityUserProfile> {
+    param: Identity.Profile.GetSingleUserProfileParam
+  ): Promise<Identity.Profile.UserProfile> {
     const response = await this.axios.request<
-      IdentityGetSingleUserProfileResponse
+      Identity.Profile.GetSingleUserProfileResponse
     >({
       url: `/v1/manage/user/profile`,
       method: 'GET',
       params: ObjectUtil.removeNil(param),
     });
-    return response!.data as IdentityUserProfile;
+    return response!.data as Identity.Profile.UserProfile;
   }
 }
 

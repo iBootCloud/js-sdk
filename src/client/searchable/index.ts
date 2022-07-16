@@ -1,17 +1,6 @@
 import { AxiosBaseClient, IBCServiceClientConfig } from '../index';
 import { IBCService } from '../../constants';
-import {
-  SearchableInitInstanceBody,
-  SearchableInstanceInfo,
-  SearchableInstanceSettings,
-  SearchableInstanceStatus,
-  SearchableListDocumentsResponse,
-  SearchablePartialUpdateDocumentsBody,
-  SearchableRemoveDocumentsBody,
-  SearchableSaveDocumentsBody,
-  SearchableSearchDocumentsBody,
-  SearchableSearchResult,
-} from '../../types';
+import { Searchable } from '../../types';
 import { IBC, ObjectUtil } from '@ibootcloud/common-lib';
 
 export type SearchableClientConfig = {
@@ -22,12 +11,14 @@ export type CreateSearchableClientConfig = SearchableClientConfig &
 
 export class SearchableClient {
   axios: AxiosBaseClient;
+
   constructor(serviceClientConfig: CreateSearchableClientConfig) {
     this.axios = new AxiosBaseClient({
       ...serviceClientConfig,
       service: IBCService.SEARCHABLE,
     });
   }
+
   /**
    * 搜索文档【V1】
    * POST /v1/search
@@ -35,12 +26,12 @@ export class SearchableClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26226103
    */
   async search(
-    param: SearchableSearchDocumentsBody,
+    param: Searchable.SearchDocumentsBody,
     opt?: { page?: IBC.Page }
-  ): Promise<SearchableSearchResult> {
+  ): Promise<Searchable.SearchResult> {
     const response = await this.axios.request<
-      SearchableSearchResult,
-      SearchableSearchDocumentsBody
+      Searchable.SearchResult,
+      Searchable.SearchDocumentsBody
     >(
       {
         url: `/v1/search`,
@@ -49,7 +40,7 @@ export class SearchableClient {
       },
       opt
     );
-    return response.data as SearchableSearchResult;
+    return response.data as Searchable.SearchResult;
   }
 
   /**
@@ -59,7 +50,7 @@ export class SearchableClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26225171
    */
   async initInstance(idField: string): Promise<void> {
-    await this.axios.request<void, SearchableInitInstanceBody>({
+    await this.axios.request<void, Searchable.InitInstanceBody>({
       url: `/v1/instance/init`,
       method: 'POST',
       data: ObjectUtil.removeUndefined({
@@ -87,12 +78,12 @@ export class SearchableClient {
    * 接口ID：26225309
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26225309
    */
-  async getInstanceStatus(): Promise<SearchableInstanceStatus> {
-    const resp = await this.axios.request<SearchableInstanceStatus>({
+  async getInstanceStatus(): Promise<Searchable.InstanceStatus> {
+    const resp = await this.axios.request<Searchable.InstanceStatus>({
       url: `/v1/instance/status`,
       method: 'GET',
     });
-    return resp.data as SearchableInstanceStatus;
+    return resp.data as Searchable.InstanceStatus;
   }
 
   /**
@@ -101,12 +92,12 @@ export class SearchableClient {
    * 接口ID：26225357
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26225357
    */
-  async getInstanceInfo(): Promise<SearchableInstanceInfo> {
-    const resp = await this.axios.request<SearchableInstanceInfo>({
+  async getInstanceInfo(): Promise<Searchable.InstanceInfo> {
+    const resp = await this.axios.request<Searchable.InstanceInfo>({
       url: `/v1/instance/info`,
       method: 'GET',
     });
-    return resp.data as SearchableInstanceInfo;
+    return resp.data as Searchable.InstanceInfo;
   }
 
   /**
@@ -116,9 +107,9 @@ export class SearchableClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26225475
    */
   async saveInstanceSettings(
-    settings: SearchableInstanceSettings
+    settings: Searchable.InstanceSettings
   ): Promise<void> {
-    await this.axios.request<void, SearchableInstanceSettings>({
+    await this.axios.request<void, Searchable.InstanceSettings>({
       url: `/v1/instance/settings`,
       method: 'PUT',
       data: ObjectUtil.removeUndefined(settings),
@@ -159,7 +150,7 @@ export class SearchableClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26225972
    */
   async listDocuments(opt?: { page?: IBC.Page }): Promise<IBC.Page<unknown>> {
-    const response = await this.axios.request<SearchableListDocumentsResponse>(
+    const response = await this.axios.request<Searchable.ListDocumentsResponse>(
       {
         url: `/v1/document`,
         method: 'GET',
@@ -176,7 +167,7 @@ export class SearchableClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26225924
    */
   async removeDocumentsById(...id: string[]): Promise<void> {
-    await this.axios.request<void, SearchableRemoveDocumentsBody>({
+    await this.axios.request<void, Searchable.RemoveDocumentsBody>({
       url: `/v1/document`,
       method: 'DELETE',
       data: ObjectUtil.removeUndefined({ id: [...id] }),
@@ -190,7 +181,7 @@ export class SearchableClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26226037
    */
   async saveDocuments(...documents: object[]): Promise<void> {
-    await this.axios.request<void, SearchableSaveDocumentsBody>({
+    await this.axios.request<void, Searchable.SaveDocumentsBody>({
       url: `/v1/document`,
       method: 'PUT',
       data: ObjectUtil.removeUndefined({ documents: [...documents] }),
@@ -204,7 +195,7 @@ export class SearchableClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26226083
    */
   async updateDocuments(...documents: object[]): Promise<void> {
-    await this.axios.request<void, SearchablePartialUpdateDocumentsBody>({
+    await this.axios.request<void, Searchable.PartialUpdateDocumentsBody>({
       url: `/v1/document`,
       method: 'PATCH',
       data: ObjectUtil.removeUndefined({ documents: [...documents] }),

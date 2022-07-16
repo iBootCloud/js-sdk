@@ -1,11 +1,6 @@
 import { IdentityModuleClientConfig } from '../index';
 import { AxiosBaseClient } from '../../axios';
-import {
-  IdentityOpenClientRequestTokenParam,
-  IdentityOpenClientRequestTokenResponse,
-  IdentityOpenClientRequestUserResponse,
-  IdentityOpenRefreshTokenBody,
-} from '../../../types';
+import { Identity } from '../../../types';
 import { ObjectUtil } from '@ibootcloud/common-lib';
 
 export class IdentityOpenClient {
@@ -33,18 +28,18 @@ export class IdentityOpenClient {
     client_secret: string;
     grant_type?: string;
     code: string;
-  }): Promise<IdentityOpenClientRequestTokenResponse> {
+  }): Promise<Identity.Open.OpenClientRequestTokenResponse> {
     const response = await this.axios.request<
-      IdentityOpenClientRequestTokenResponse
+      Identity.Open.OpenClientRequestTokenResponse
     >({
       url: `/v1/open/oauth/token`,
       method: 'GET',
       params: ObjectUtil.removeNil({
         grant_type,
         ...params,
-      }) as IdentityOpenClientRequestTokenParam,
+      }) as Identity.Open.OpenClientRequestTokenParam,
     });
-    return response!.data as IdentityOpenClientRequestTokenResponse;
+    return response!.data as Identity.Open.OpenClientRequestTokenResponse;
   }
 
   /**
@@ -57,15 +52,15 @@ export class IdentityOpenClient {
     accessToken,
   }: {
     accessToken: string;
-  }): Promise<IdentityOpenClientRequestUserResponse> {
+  }): Promise<Identity.Open.OpenClientRequestUserResponse> {
     const response = await new AxiosBaseClient({
       ...this.clientConfig,
       accessToken,
-    }).request<IdentityOpenClientRequestUserResponse>({
+    }).request<Identity.Open.OpenClientRequestUserResponse>({
       url: `/v1/open/oauth/user`,
       method: 'GET',
     });
-    return response!.data as IdentityOpenClientRequestUserResponse;
+    return response!.data as Identity.Open.OpenClientRequestUserResponse;
   }
 
   /**
@@ -75,17 +70,17 @@ export class IdentityOpenClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397366
    */
   async refreshToken(
-    param: IdentityOpenRefreshTokenBody
-  ): Promise<IdentityOpenClientRequestTokenResponse> {
+    param: Identity.Open.OpenRefreshTokenBody
+  ): Promise<Identity.Open.OpenClientRequestTokenResponse> {
     const response = await this.axios.request<
-      IdentityOpenClientRequestTokenResponse,
-      IdentityOpenRefreshTokenBody
+      Identity.Open.OpenClientRequestTokenResponse,
+      Identity.Open.OpenRefreshTokenBody
     >({
       url: `/v1/open/oauth/token/refresh`,
       method: 'POST',
       data: ObjectUtil.removeNil(param),
     });
-    return response!.data as IdentityOpenClientRequestTokenResponse;
+    return response!.data as Identity.Open.OpenClientRequestTokenResponse;
   }
 }
 

@@ -1,6 +1,6 @@
 import { AxiosBaseClient } from '../../axios';
 import { IdentityModuleClientConfig } from '../index';
-import { IdentityConfigSet, IdentityGetConfigParam } from '../../../types';
+import { Identity } from '../../../types';
 import { ObjectUtil } from '@ibootcloud/common-lib';
 
 export class IdentityManageConfigClient {
@@ -20,8 +20,8 @@ export class IdentityManageConfigClient {
    * 接口ID：21397362
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397362
    */
-  async save(param: IdentityConfigSet): Promise<void> {
-    await this.axios.request<void, IdentityConfigSet>({
+  async save(param: Identity.Config.ConfigSet): Promise<void> {
+    await this.axios.request<void, Identity.Config.ConfigSet>({
       url: `/v1/manage/config`,
       method: 'PATCH',
       data: ObjectUtil.removeUndefined(param),
@@ -34,13 +34,15 @@ export class IdentityManageConfigClient {
    * 接口ID：21795167
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21795167
    */
-  async get(param: IdentityGetConfigParam = {}): Promise<IdentityConfigSet> {
-    const response = await this.axios.request<IdentityConfigSet>({
+  async get(
+    param: Identity.Config.GetConfigParam = {}
+  ): Promise<Identity.Config.ConfigSet> {
+    const response = await this.axios.request<Identity.Config.ConfigSet>({
       url: `/v1/manage/config`,
       method: 'GET',
       params: ObjectUtil.removeNil(param),
     });
-    return response!.data as IdentityConfigSet;
+    return response!.data as Identity.Config.ConfigSet;
   }
 }
 

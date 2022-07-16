@@ -1,6 +1,6 @@
 import { AxiosBaseClient } from '../../axios';
 import { createRecordClient, DataboxDBRecordClient } from './record';
-import { DataboxDBRecordData } from '../../../types';
+import { Databox } from '../../../types';
 
 export type DataboxDBTableClientConfig = {
   table: string;
@@ -10,6 +10,7 @@ export class DataboxDBTableClient {
   axios: AxiosBaseClient;
   tableClientConfig: DataboxDBTableClientConfig;
   table: string;
+
   constructor(
     axios: AxiosBaseClient,
     tableClientConfig: DataboxDBTableClientConfig
@@ -18,9 +19,11 @@ export class DataboxDBTableClient {
     this.tableClientConfig = tableClientConfig;
     this.table = tableClientConfig.table;
   }
-  record(recordData?: DataboxDBRecordData): DataboxDBRecordClient {
+
+  record(recordData?: Databox.DB.RecordData): DataboxDBRecordClient {
     return createRecordClient(this.axios, this.tableClientConfig, recordData);
   }
+
   /**
    * 创建DB表
    */

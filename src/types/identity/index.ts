@@ -1,9 +1,17 @@
-export * from './profile';
-export * from './Hook';
-export * from './config';
-export * from './open';
-export * from './auth';
+import { Profile as _Profile } from './profile';
+import { Hook as _Hook } from './Hook';
+import { Config as _Config } from './config';
+import { Open as _Open } from './open';
+import { Auth as _Auth } from './auth';
 
-export interface IdentityEndUserRequestParam {
-  accessToken?: string;
+export namespace Identity {
+  export interface EndUserRequestParam {
+    accessToken?: string;
+  }
+
+  export import Profile = _Profile;
+  export import Hook = _Hook;
+  export import Config = _Config;
+  export import Open = _Open;
+  export import Auth = _Auth;
 }

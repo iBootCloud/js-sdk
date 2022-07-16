@@ -1,13 +1,7 @@
 import { AxiosBaseClient, PaginationOpt } from '../../../axios';
 import { IBC, ObjectUtil } from '@ibootcloud/common-lib';
 import { MicofunModuleClientConfig } from '../../index';
-import {
-  MicofunUrlConvertShortenUrlResponse,
-  MicofunUrlListShortenUrlResponse,
-  MicofunUrlShortenUrlBody,
-  MicofunUrlShortenUrlInfo,
-  MicofunUrlShortenUrlResponse,
-} from '../../../../types';
+import { Micofun } from '../../../../types';
 
 export interface MicofunUrlShortenClientConfig {
   instanceId: string;
@@ -15,6 +9,7 @@ export interface MicofunUrlShortenClientConfig {
 
 export class MicofunUrlShortenClient {
   axios: AxiosBaseClient;
+
   constructor(
     moduleClientConfig: MicofunModuleClientConfig,
     cfg: MicofunUrlShortenClientConfig
@@ -24,6 +19,7 @@ export class MicofunUrlShortenClient {
       ...cfg,
     });
   }
+
   /**
    * 初始化短链接实例 【V1】
    * POST /v1/url/shorten/instance/init
@@ -58,8 +54,8 @@ export class MicofunUrlShortenClient {
    */
   async generate(url: string): Promise<string> {
     const resp = await this.axios.request<
-      MicofunUrlShortenUrlResponse,
-      MicofunUrlShortenUrlBody
+      Micofun.Url.Shorten.ShortenUrlResponse,
+      Micofun.Url.Shorten.ShortenUrlBody
     >({
       url: `/v1/url/shorten`,
       method: 'POST',
@@ -77,7 +73,9 @@ export class MicofunUrlShortenClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397379
    */
   async convert(shortenId: string): Promise<string> {
-    const resp = await this.axios.request<MicofunUrlConvertShortenUrlResponse>({
+    const resp = await this.axios.request<
+      Micofun.Url.Shorten.ConvertShortenUrlResponse
+    >({
       url: `/v1/url/shorten/convert/${shortenId}`,
       method: 'GET',
     });
@@ -93,8 +91,10 @@ export class MicofunUrlShortenClient {
   async list(
     query?: string,
     opt?: PaginationOpt
-  ): Promise<IBC.Page<MicofunUrlShortenUrlInfo>> {
-    const resp = await this.axios.request<MicofunUrlListShortenUrlResponse>(
+  ): Promise<IBC.Page<Micofun.Url.Shorten.ShortenUrlInfo>> {
+    const resp = await this.axios.request<
+      Micofun.Url.Shorten.ListShortenUrlResponse
+    >(
       {
         url: `/v1/url/shorten/list`,
         method: 'GET',

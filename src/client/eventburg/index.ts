@@ -1,18 +1,7 @@
 import { AxiosBaseClient, IBCServiceClientConfig } from '../index';
 import { IBCService } from '../../constants';
 import { ObjectUtil } from '@ibootcloud/common-lib';
-import {
-  EventburgCountEventResponse,
-  EventburgEventBody,
-  EventburgEventFilter,
-  EventburgEventHistogramInfo,
-  EventburgEventInfo,
-  EventburgGetEventHistogramParam,
-  EventburgGetEventHistogramResponse,
-  EventburgListEventHitsParam,
-  EventburgListEventHitsResponse,
-  EventburgReportEventBody,
-} from '../../types';
+import { Eventburg } from '../../types';
 
 export type EventburgClientConfig = {
   instanceId: string;
@@ -22,20 +11,22 @@ export type CreateEventburgClientConfig = EventburgClientConfig &
 
 export class EventburgClient {
   axios: AxiosBaseClient;
+
   constructor(serviceClientConfig: CreateEventburgClientConfig) {
     this.axios = new AxiosBaseClient({
       ...serviceClientConfig,
       service: IBCService.EVENTBURG,
     });
   }
+
   /**
    * 事件上报 【V1】
    * POST /v1/event/report
    * 接口ID：21397371
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397371
    */
-  async report(...events: EventburgEventBody[]): Promise<void> {
-    await this.axios.request<void, EventburgReportEventBody>({
+  async report(...events: Eventburg.EventBody[]): Promise<void> {
+    await this.axios.request<void, Eventburg.ReportEventBody>({
       url: `/v1/event/report`,
       method: 'POST',
       data: { events },
@@ -48,8 +39,8 @@ export class EventburgClient {
    * 接口ID：26571114
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26571114
    */
-  async countEvent(filter?: EventburgEventFilter): Promise<number> {
-    const response = await this.axios.request<EventburgCountEventResponse>({
+  async countEvent(filter?: Eventburg.EventFilter): Promise<number> {
+    const response = await this.axios.request<Eventburg.CountEventResponse>({
       url: `/v1/event/count`,
       method: 'GET',
       params: { filter },
@@ -64,14 +55,14 @@ export class EventburgClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26572465
    */
   async getEventHits(
-    param?: EventburgListEventHitsParam
-  ): Promise<EventburgEventInfo[]> {
-    const response = await this.axios.request<EventburgListEventHitsResponse>({
+    param?: Eventburg.ListEventHitsParam
+  ): Promise<Eventburg.EventInfo[]> {
+    const response = await this.axios.request<Eventburg.ListEventHitsResponse>({
       url: `/v1/event/hits`,
       method: 'GET',
       params: ObjectUtil.removeUndefined(param),
     });
-    return response.data as EventburgListEventHitsResponse;
+    return response.data as Eventburg.ListEventHitsResponse;
   }
 
   /**
@@ -81,16 +72,16 @@ export class EventburgClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-26573116
    */
   async getEventHistogram(
-    param?: EventburgGetEventHistogramParam
-  ): Promise<EventburgEventHistogramInfo> {
+    param?: Eventburg.GetEventHistogramParam
+  ): Promise<Eventburg.EventHistogramInfo> {
     const response = await this.axios.request<
-      EventburgGetEventHistogramResponse
+      Eventburg.GetEventHistogramResponse
     >({
       url: `/v1/event/histogram`,
       method: 'GET',
       params: ObjectUtil.removeUndefined(param),
     });
-    return response.data as EventburgGetEventHistogramResponse;
+    return response.data as Eventburg.GetEventHistogramResponse;
   }
 }
 

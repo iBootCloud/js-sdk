@@ -1,19 +1,17 @@
 import { AxiosBaseClient } from '../../axios';
 import { MicofunModuleClientConfig } from '../index';
 import { ObjectUtil } from '@ibootcloud/common-lib';
-import {
-  MicofunNotifySendEMailBody,
-  MicofunNotifySendSMSBody,
-  MicofunNotifySMSTemplate,
-} from '../../../types';
+import { Micofun } from '../../../types';
 
 export class MicofunNotifyClient {
   axios: AxiosBaseClient;
+
   constructor(moduleClientConfig: MicofunModuleClientConfig) {
     this.axios = new AxiosBaseClient({
       ...moduleClientConfig,
     });
   }
+
   /**
    * 提交短信发送 [V1]
    * POST /v1/notify/sms
@@ -22,10 +20,10 @@ export class MicofunNotifyClient {
    */
   async sms(
     target: string[],
-    template: MicofunNotifySMSTemplate,
+    template: Micofun.Notify.SMSTemplate,
     templateParams?: Record<string, string>
   ): Promise<void> {
-    await this.axios.request<void, MicofunNotifySendSMSBody>({
+    await this.axios.request<void, Micofun.Notify.SendSMSBody>({
       url: `/v1/notify/sms`,
       method: 'POST',
       data: ObjectUtil.removeUndefined({
@@ -42,8 +40,8 @@ export class MicofunNotifyClient {
    * 接口ID：25627669
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-25627669
    */
-  async email(params: MicofunNotifySendEMailBody): Promise<void> {
-    await this.axios.request<void, MicofunNotifySendEMailBody>({
+  async email(params: Micofun.Notify.SendEMailBody): Promise<void> {
+    await this.axios.request<void, Micofun.Notify.SendEMailBody>({
       url: `/v1/notify/email`,
       method: 'POST',
       data: ObjectUtil.removeUndefined(params),

@@ -1,60 +1,62 @@
-export class IdentityWebHookConfig {
-  endpoint?: string;
-  headers?: Record<string, string>;
-}
-
-export type IdentityHookConfig = IdentityWebHookConfig;
-
-export interface IdentityHook {
-  hookId?: string;
-  hookType?: IdentityHookType;
-  eventType?: IdentityHookEvent;
-  config?: IdentityHookConfig;
-  meta?: IdentityHookMeta;
-}
-
 import { IBC } from '@ibootcloud/common-lib';
 
-export enum IdentityHookEvent {
-  LOGIN = 1,
-  LOGOUT = 2,
-  REFRESH_TOKEN = 3,
-}
+export namespace Hook {
+  export class WebHookConfig {
+    endpoint?: string;
+    headers?: Record<string, string>;
+  }
 
-export enum IdentityHookType {
-  WEBHOOK = 1,
-}
+  export type HookConfig = WebHookConfig;
 
-export interface IdentityHookMeta {
-  name?: string;
-  description?: string;
-}
+  export interface Hook {
+    hookId?: string;
+    hookType?: HookType;
+    eventType?: HookEvent;
+    config?: HookConfig;
+    meta?: HookMeta;
+  }
 
-export interface IdentityCreateHookBody {
-  hookType: IdentityHookType;
-  eventType: IdentityHookEvent;
-  config: IdentityHookConfig;
-  meta: IdentityHookMeta;
-}
+  export enum HookEvent {
+    LOGIN = 1,
+    LOGOUT = 2,
+    REFRESH_TOKEN = 3,
+  }
 
-export interface IdentityUpdateHookBody extends IdentityCreateHookBody {
-  hookId: string;
-}
+  export enum HookType {
+    WEBHOOK = 1,
+  }
 
-export interface IdentityListHookParam {
-  hookId?: string[];
-  eventType?: IdentityHookEvent[];
-  hookType?: IdentityHookType[];
-}
+  export interface HookMeta {
+    name?: string;
+    description?: string;
+  }
 
-export interface IdentityListHookResponse {
-  page: IBC.Page<IdentityHook>;
-}
+  export interface CreateHookBody {
+    hookType: HookType;
+    eventType: HookEvent;
+    config: HookConfig;
+    meta: HookMeta;
+  }
 
-export interface IdentityRemoveHookBody {
-  hookId: string[];
-}
+  export interface UpdateHookBody extends CreateHookBody {
+    hookId: string;
+  }
 
-export interface IdentityRemoveHookResponse {
-  affected: number;
+  export interface ListHookParam {
+    hookId?: string[];
+    eventType?: HookEvent[];
+    hookType?: HookType[];
+  }
+
+  export interface ListHookResponse {
+    page: IBC.Page<Hook>;
+  }
+
+  export interface RemoveHookBody {
+    hookId: string[];
+  }
+
+  export interface RemoveHookResponse {
+    affected: number;
+  }
 }

@@ -1,17 +1,6 @@
 import { AxiosBaseClient, PaginationOpt } from '../../axios';
 import { IdentityModuleClientConfig } from '../index';
-import {
-  IdentityCreateOpenClientBody,
-  IdentityGenOauthCodeParam,
-  IdentityGenOauthCodeResponse,
-  IdentityGetOpenClientParam,
-  IdentityListOpenClientParam,
-  IdentityListOpenClientsResponse,
-  IdentityOpenThirdpartyClient,
-  IdentityRemoveOpenClientBody,
-  IdentityRemoveOpenClientResponse,
-  IdentityUpdateOpenClientBody,
-} from '../../../types';
+import { Identity } from '../../../types';
 import { IBC, ObjectUtil } from '@ibootcloud/common-lib';
 
 export class IdentityManageOpenClient {
@@ -32,12 +21,16 @@ export class IdentityManageOpenClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397343
    */
   async generateAuthorizationCode(
-    param: IdentityGenOauthCodeParam
+    param: Identity.Open.GenOauthCodeParam
   ): Promise<string> {
-    const response = await this.axios.request<IdentityGenOauthCodeResponse>({
+    const response = await this.axios.request<
+      Identity.Open.GenOauthCodeResponse
+    >({
       url: `/v1/manage/open/oauth/authorize/code`,
       method: 'GET',
-      params: ObjectUtil.removeUndefined(param) as IdentityGenOauthCodeParam,
+      params: ObjectUtil.removeUndefined(
+        param
+      ) as Identity.Open.GenOauthCodeParam,
     });
     return response.data!.code;
   }
@@ -49,17 +42,17 @@ export class IdentityManageOpenClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-28622756
    */
   async createClient(
-    param: IdentityCreateOpenClientBody
-  ): Promise<IdentityOpenThirdpartyClient> {
+    param: Identity.Open.CreateOpenClientBody
+  ): Promise<Identity.Open.OpenThirdpartyClient> {
     const response = await this.axios.request<
-      IdentityOpenThirdpartyClient,
-      IdentityCreateOpenClientBody
+      Identity.Open.OpenThirdpartyClient,
+      Identity.Open.CreateOpenClientBody
     >({
       url: `/v1/manage/open/client`,
       method: 'POST',
       data: ObjectUtil.removeUndefined(param),
     });
-    return response.data as IdentityOpenThirdpartyClient;
+    return response.data as Identity.Open.OpenThirdpartyClient;
   }
 
   /**
@@ -68,8 +61,8 @@ export class IdentityManageOpenClient {
    * 接口ID：21397359
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397359
    */
-  async updateClient(param: IdentityUpdateOpenClientBody): Promise<void> {
-    await this.axios.request<void, IdentityUpdateOpenClientBody>({
+  async updateClient(param: Identity.Open.UpdateOpenClientBody): Promise<void> {
+    await this.axios.request<void, Identity.Open.UpdateOpenClientBody>({
       url: `/v1/manage/open/client`,
       method: 'PUT',
       data: ObjectUtil.removeUndefined(param),
@@ -84,8 +77,8 @@ export class IdentityManageOpenClient {
    */
   async removeClients(clientId?: string[]): Promise<number> {
     const response = await this.axios.request<
-      IdentityRemoveOpenClientResponse,
-      IdentityRemoveOpenClientBody
+      Identity.Open.RemoveOpenClientResponse,
+      Identity.Open.RemoveOpenClientBody
     >({
       url: `/v1/manage/open/client`,
       method: 'DELETE',
@@ -101,14 +94,18 @@ export class IdentityManageOpenClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397360
    */
   async listClients(
-    param: IdentityListOpenClientParam = {},
+    param: Identity.Open.ListOpenClientParam = {},
     opt?: PaginationOpt
-  ): Promise<IBC.Page<IdentityOpenThirdpartyClient>> {
-    const response = await this.axios.request<IdentityListOpenClientsResponse>(
+  ): Promise<IBC.Page<Identity.Open.OpenThirdpartyClient>> {
+    const response = await this.axios.request<
+      Identity.Open.ListOpenClientsResponse
+    >(
       {
         url: `/v1/manage/open/clients`,
         method: 'GET',
-        params: ObjectUtil.removeNil(param) as IdentityListOpenClientParam,
+        params: ObjectUtil.removeNil(
+          param
+        ) as Identity.Open.ListOpenClientParam,
       },
       opt
     );
@@ -121,13 +118,17 @@ export class IdentityManageOpenClient {
    * 接口ID：28631710
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-28631710
    */
-  async getClient(clientId: string): Promise<IdentityOpenThirdpartyClient> {
-    const response = await this.axios.request<IdentityOpenThirdpartyClient>({
+  async getClient(
+    clientId: string
+  ): Promise<Identity.Open.OpenThirdpartyClient> {
+    const response = await this.axios.request<
+      Identity.Open.OpenThirdpartyClient
+    >({
       url: `/v1/manage/open/client`,
       method: 'GET',
-      params: { clientId } as IdentityGetOpenClientParam,
+      params: { clientId } as Identity.Open.GetOpenClientParam,
     });
-    return response.data as IdentityOpenThirdpartyClient;
+    return response.data as Identity.Open.OpenThirdpartyClient;
   }
 }
 

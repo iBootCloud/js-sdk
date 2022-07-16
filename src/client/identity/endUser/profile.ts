@@ -1,11 +1,6 @@
 import { AxiosBaseClient } from '../../axios';
 import { IdentityModuleClientConfig } from '../index';
-import {
-  IdentityEndUserGetMyProfileParam,
-  IdentityEndUserGetMyProfileResponse,
-  IdentityEndUserRequestParam,
-  IdentityUserProfile,
-} from '../../../types';
+import { Identity } from '../../../types';
 import { ObjectUtil } from '@ibootcloud/common-lib';
 
 export class IdentityEndUserProfileClient {
@@ -26,19 +21,19 @@ export class IdentityEndUserProfileClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397332
    */
   async getMyProfile(
-    param: IdentityEndUserRequestParam & {
-      config?: IdentityEndUserGetMyProfileParam;
+    param: Identity.EndUserRequestParam & {
+      config?: Identity.Profile.EndUserGetMyProfileParam;
     } = {}
-  ): Promise<IdentityUserProfile> {
+  ): Promise<Identity.Profile.UserProfile> {
     const response = await new AxiosBaseClient({
       ...this.clientConfig,
       accessToken: param?.accessToken,
-    }).request<IdentityEndUserGetMyProfileResponse>({
+    }).request<Identity.Profile.EndUserGetMyProfileResponse>({
       url: `/v1/endUser/profile/me`,
       method: 'GET',
       params: ObjectUtil.removeNil(param.config),
     });
-    return response!.data as IdentityUserProfile;
+    return response!.data as Identity.Profile.UserProfile;
   }
 }
 

@@ -1,13 +1,6 @@
 import { AxiosBaseClient, PaginationOpt } from '../../axios';
 import { IdentityModuleClientConfig } from '../index';
-import {
-  IdentityCreateHookBody,
-  IdentityHook,
-  IdentityListHookParam,
-  IdentityListHookResponse,
-  IdentityRemoveHookBody,
-  IdentityUpdateHookBody,
-} from '../../../types';
+import { Identity } from '../../../types';
 import { IBC, ObjectUtil } from '@ibootcloud/common-lib';
 
 export class IdentityManageHookClient {
@@ -27,16 +20,18 @@ export class IdentityManageHookClient {
    * 接口ID：21547686
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21547686
    */
-  async create(param: IdentityCreateHookBody): Promise<IdentityHook> {
+  async create(
+    param: Identity.Hook.CreateHookBody
+  ): Promise<Identity.Hook.Hook> {
     const response = await this.axios.request<
-      IdentityHook,
-      IdentityCreateHookBody
+      Identity.Hook.Hook,
+      Identity.Hook.CreateHookBody
     >({
       url: `/v1/manage/hook`,
       method: 'POST',
       data: ObjectUtil.removeUndefined(param),
     });
-    return response.data as IdentityHook;
+    return response.data as Identity.Hook.Hook;
   }
 
   /**
@@ -45,8 +40,8 @@ export class IdentityManageHookClient {
    * 接口ID：21587179
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21587179
    */
-  async update(param: IdentityUpdateHookBody): Promise<void> {
-    await this.axios.request<void, IdentityUpdateHookBody>({
+  async update(param: Identity.Hook.UpdateHookBody): Promise<void> {
+    await this.axios.request<void, Identity.Hook.UpdateHookBody>({
       url: `/v1/manage/hook`,
       method: 'PUT',
       data: ObjectUtil.removeUndefined(param),
@@ -60,7 +55,7 @@ export class IdentityManageHookClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21574199
    */
   async remove(hookId: string[]): Promise<void> {
-    await this.axios.request<void, IdentityRemoveHookBody>({
+    await this.axios.request<void, Identity.Hook.RemoveHookBody>({
       url: `/v1/manage/hook`,
       method: 'DELETE',
       data: ObjectUtil.removeUndefined({ hookId }),
@@ -74,10 +69,10 @@ export class IdentityManageHookClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21575122
    */
   async list(
-    param: IdentityListHookParam = {},
+    param: Identity.Hook.ListHookParam = {},
     opt?: PaginationOpt
-  ): Promise<IBC.Page<IdentityHook>> {
-    const response = await this.axios.request<IdentityListHookResponse>(
+  ): Promise<IBC.Page<Identity.Hook.Hook>> {
+    const response = await this.axios.request<Identity.Hook.ListHookResponse>(
       {
         url: `/v1/manage/hook`,
         method: 'GET',

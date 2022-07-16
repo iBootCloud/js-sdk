@@ -1,12 +1,7 @@
 import { AxiosBaseClient } from '../../axios';
 import { MicofunModuleClientConfig } from '../index';
 import { ObjectUtil } from '@ibootcloud/common-lib';
-import {
-  MicofunOTPGenerateOTPBody,
-  MicofunOTPGenerateOTPResponse,
-  MicofunOTPValidateOTPBody,
-  MicofunOTPValidateOTPResponse,
-} from '../../../types';
+import { Micofun } from '../../../types';
 
 export interface MicofunOTPClientConfig {
   instanceId: string;
@@ -15,6 +10,7 @@ export interface MicofunOTPClientConfig {
 export class MicofunOTPClient {
   otpClientConfig: MicofunOTPClientConfig;
   axios: AxiosBaseClient;
+
   constructor(
     otpClientConfig: MicofunOTPClientConfig,
     moduleClientConfig: MicofunModuleClientConfig
@@ -25,16 +21,17 @@ export class MicofunOTPClient {
       ...otpClientConfig,
     });
   }
+
   /**
    * 生成OTP [V1]
    * POST /v1/otp/generate
    * 接口ID：25650112
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-25650112
    */
-  async generate(params: MicofunOTPGenerateOTPBody): Promise<string> {
+  async generate(params: Micofun.OTP.GenerateOTPBody): Promise<string> {
     const response = await this.axios.request<
-      MicofunOTPGenerateOTPResponse,
-      MicofunOTPGenerateOTPBody
+      Micofun.OTP.GenerateOTPResponse,
+      Micofun.OTP.GenerateOTPBody
     >({
       url: `/v1/otp/generate`,
       method: 'POST',
@@ -49,10 +46,10 @@ export class MicofunOTPClient {
    * 接口ID：21397378
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397378
    */
-  async validate(params: MicofunOTPValidateOTPBody): Promise<boolean> {
+  async validate(params: Micofun.OTP.ValidateOTPBody): Promise<boolean> {
     const response = await this.axios.request<
-      MicofunOTPValidateOTPResponse,
-      MicofunOTPValidateOTPBody
+      Micofun.OTP.ValidateOTPResponse,
+      Micofun.OTP.ValidateOTPBody
     >({
       url: `/v1/otp/validate`,
       method: 'POST',

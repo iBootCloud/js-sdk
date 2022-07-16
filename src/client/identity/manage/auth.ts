@@ -1,16 +1,6 @@
 import { AxiosBaseClient } from '../../axios';
 import { IdentityModuleClientConfig } from '../index';
-import {
-  IdentityApplyMagicTokenLoginResponse,
-  IdentityApplyOTPLoginBody,
-  IdentityApplyOTPLoginResponse,
-  IdentityApplyPasswordlessLoginBody,
-  IdentityGenerateUserTokenParam,
-  IdentityGenerateUserTokenResponse,
-  IdentityInvalidUserTokenBody,
-  IdentityUpdateUserPasswordBody,
-  IdentityUserTokenPack,
-} from '../../../types';
+import { Identity } from '../../../types';
 import { ObjectUtil } from '@ibootcloud/common-lib';
 
 export class IdentityManageAuthClient {
@@ -31,7 +21,7 @@ export class IdentityManageAuthClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-29177639
    */
   async updateUserPassword(uid: string, password: string): Promise<void> {
-    await this.axios.request<void, IdentityUpdateUserPasswordBody>({
+    await this.axios.request<void, Identity.Auth.UpdateUserPasswordBody>({
       url: `/v1/manage/auth/password`,
       method: 'PUT',
       data: ObjectUtil.removeNil({ uid, password }),
@@ -45,17 +35,17 @@ export class IdentityManageAuthClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21515262
    */
   async applyMagicTokenLogin(
-    param: IdentityApplyPasswordlessLoginBody
-  ): Promise<IdentityApplyMagicTokenLoginResponse> {
+    param: Identity.Auth.ApplyPasswordlessLoginBody
+  ): Promise<Identity.Auth.ApplyMagicTokenLoginResponse> {
     const response = await this.axios.request<
-      IdentityApplyMagicTokenLoginResponse,
-      IdentityApplyPasswordlessLoginBody
+      Identity.Auth.ApplyMagicTokenLoginResponse,
+      Identity.Auth.ApplyPasswordlessLoginBody
     >({
       url: `/v1/manage/auth/login/passwordless/magicToken/apply`,
       method: 'POST',
       data: ObjectUtil.removeNil(param),
     });
-    return response.data as IdentityApplyMagicTokenLoginResponse;
+    return response.data as Identity.Auth.ApplyMagicTokenLoginResponse;
   }
 
   /**
@@ -65,17 +55,17 @@ export class IdentityManageAuthClient {
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21596769
    */
   async applyOTPLogin(
-    param: IdentityApplyOTPLoginBody
-  ): Promise<IdentityApplyOTPLoginResponse> {
+    param: Identity.Auth.ApplyOTPLoginBody
+  ): Promise<Identity.Auth.ApplyOTPLoginResponse> {
     const response = await this.axios.request<
-      IdentityApplyOTPLoginResponse,
-      IdentityApplyOTPLoginBody
+      Identity.Auth.ApplyOTPLoginResponse,
+      Identity.Auth.ApplyOTPLoginBody
     >({
       url: `/v1/manage/auth/login/passwordless/otp/apply`,
       method: 'POST',
       data: ObjectUtil.removeNil(param),
     });
-    return response.data as IdentityApplyOTPLoginResponse;
+    return response.data as Identity.Auth.ApplyOTPLoginResponse;
   }
 
   /**
@@ -84,8 +74,10 @@ export class IdentityManageAuthClient {
    * 接口ID：21397342
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21397342
    */
-  async invalidUserToken(param: IdentityInvalidUserTokenBody): Promise<void> {
-    await this.axios.request<void, IdentityInvalidUserTokenBody>({
+  async invalidUserToken(
+    param: Identity.Auth.InvalidUserTokenBody
+  ): Promise<void> {
+    await this.axios.request<void, Identity.Auth.InvalidUserTokenBody>({
       url: `/v1/manage/auth/token`,
       method: 'DELETE',
       data: ObjectUtil.removeNil(param),
@@ -98,13 +90,13 @@ export class IdentityManageAuthClient {
    * 接口ID：21599708
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-21599708
    */
-  async generateUserToken(uid: string): Promise<IdentityUserTokenPack> {
+  async generateUserToken(uid: string): Promise<Identity.Auth.UserTokenPack> {
     const response = await this.axios.request<
-      IdentityGenerateUserTokenResponse
+      Identity.Auth.GenerateUserTokenResponse
     >({
       url: `/v1/manage/auth/token`,
       method: 'GET',
-      params: { uid } as IdentityGenerateUserTokenParam,
+      params: { uid } as Identity.Auth.GenerateUserTokenParam,
     });
     return response.data!.token;
   }

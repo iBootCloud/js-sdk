@@ -1,37 +1,20 @@
 import { AxiosBaseClient } from '../../axios';
 import { DataboxModuleClientConfig } from '../index';
 import { ObjectUtil, TimeUtil } from '@ibootcloud/common-lib';
-import {
-  DataboxListAddItemsBody,
-  DataboxListAddItemsResponse,
-  DataboxListAddItemsType,
-  DataboxListExpireListsBody,
-  DataboxListFindItemIndexParam,
-  DataboxListFindItemIndexResponse,
-  DataboxListGetListIdInNamespaceResponse,
-  DataboxListGetListItemParam,
-  DataboxListGetListItemResponse,
-  ListItem,
-  DataboxListRemoveItemsBody,
-  DataboxListRemoveItemsResponse,
-  DataboxListRemoveItemsType,
-  DataboxListRemoveListResponse,
-  DataboxListRemoveListsBody,
-  DataboxListRemoveNamespaceResponse,
-  DataboxListSetListBody,
-  DataboxListUpdateItemByIndexBody,
-} from '../../../types';
+import { Databox } from '../../../types';
 
 export interface DataboxListClientConfig {
   instanceId: string;
   namespace?: string;
 }
+
 export const LIST_DEFAULT_NS = 'DEFAULT';
 
 export class DataboxListClient {
   axios: AxiosBaseClient;
   instanceId: string;
   namespace: string;
+
   constructor(
     moduleClientConfig: DataboxModuleClientConfig,
     { instanceId, namespace = LIST_DEFAULT_NS }: DataboxListClientConfig
@@ -43,6 +26,7 @@ export class DataboxListClient {
       instanceId,
     });
   }
+
   /**
    * 移除命名空间
    * 将移除命名空间下所有List
@@ -51,54 +35,65 @@ export class DataboxListClient {
    */
   async removeNamespace(ns: string = this.namespace): Promise<number> {
     const response = await this.axios.request<
-      DataboxListRemoveNamespaceResponse
+      Databox.List.RemoveNamespaceResponse
     >({
       url: `/v1/list/namespace/${ns}`,
       method: 'DELETE',
     });
     return response.data!.affected;
   }
+
   /**
    * 获取命名空间下所有ListId
    * @return ListId数组
    */
   async listIds(): Promise<string[]> {
     const response = await this.axios.request<
-      DataboxListGetListIdInNamespaceResponse
+      Databox.List.GetListIdInNamespaceResponse
     >({
       url: `/v1/list/namespace/${this.namespace}/listId`,
       method: 'GET',
     });
-    return response.data as DataboxListGetListIdInNamespaceResponse;
+    return response.data as Databox.List.GetListIdInNamespaceResponse;
   }
+
   /**
    * 获取List元素 [V1]
    * @return 列表元素
    */
   async getItems(
     listId: string,
-    opt?: DataboxListGetListItemParam
-  ): Promise<ListItem[]> {
-    const response = await this.axios.request<DataboxListGetListItemResponse>({
-      url: `/v1/list/namespace/${this.namespace}/list/${listId}/items`,
-      method: 'GET',
-      params: ObjectUtil.removeUndefined(opt) as DataboxListGetListItemParam,
-    });
-    return response.data as DataboxListGetListItemResponse;
+    opt?: Databox.List.GetListItemParam
+  ): Promise<Databox.List.ListItem[]> {
+    const response = await this.axios.request<Databox.List.GetListItemResponse>(
+      {
+        url: `/v1/list/namespace/${this.namespace}/list/${listId}/items`,
+        method: 'GET',
+        params: ObjectUtil.removeUndefined(
+          opt
+        ) as Databox.List.GetListItemParam,
+      }
+    );
+    return response.data as Databox.List.GetListItemResponse;
   }
+
   /**
    * 获取List元素 [V1]
    * @return 列表元素
    * @param listId
    * @param index
    */
-  async getItemByIndex(listId: string, index: number): Promise<ListItem> {
-    const response = await this.axios.request<ListItem>({
+  async getItemByIndex(
+    listId: string,
+    index: number
+  ): Promise<Databox.List.ListItem> {
+    const response = await this.axios.request<Databox.List.ListItem>({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}/item/${index}`,
       method: 'GET',
     });
-    return response.data as ListItem;
+    return response.data as Databox.List.ListItem;
   }
+
   /**
    * 保存List [V1]
    * @param listId 列表ID
@@ -107,10 +102,10 @@ export class DataboxListClient {
    */
   async save(
     listId: string,
-    list: ListItem[],
+    list: Databox.List.ListItem[],
     expire?: { ttl?: number; expiredTime?: Date }
   ): Promise<void> {
-    await this.axios.request<void, DataboxListSetListBody>({
+    await this.axios.request<void, Databox.List.SetListBody>({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}`,
       method: 'PUT',
       data: ObjectUtil.removeUndefined({
@@ -122,14 +117,15 @@ export class DataboxListClient {
       }),
     });
   }
+
   /**
    * 移除List [V1]
    * @return 移除的list数目
    */
   async removeLists(listId: string[]): Promise<number> {
     const response = await this.axios.request<
-      DataboxListRemoveListResponse,
-      DataboxListRemoveListsBody
+      Databox.List.RemoveListResponse,
+      Databox.List.RemoveListsBody
     >({
       url: `/v1/list/namespace/${this.namespace}/list`,
       method: 'DELETE',
@@ -139,6 +135,7 @@ export class DataboxListClient {
     });
     return response.data!.affected;
   }
+
   /**
    * 设置List的过期时间 [V1]
    */
@@ -146,7 +143,7 @@ export class DataboxListClient {
     listId: string[],
     expire?: { ttl?: number; expiredTime?: Date }
   ): Promise<void> {
-    await this.axios.request<void, DataboxListExpireListsBody>({
+    await this.axios.request<void, Databox.List.ExpireListsBody>({
       url: `/v1/list/namespace/${this.namespace}/expire`,
       method: 'POST',
       data: ObjectUtil.removeUndefined({
@@ -158,6 +155,7 @@ export class DataboxListClient {
       }),
     });
   }
+
   /**
    * 添加列表元素 [V1]
    * @return 更新后的列表长度
@@ -167,12 +165,12 @@ export class DataboxListClient {
    */
   async addItems(
     listId: string,
-    items: ListItem[],
-    type: DataboxListAddItemsType
+    items: Databox.List.ListItem[],
+    type: Databox.List.AddItemsType
   ): Promise<number> {
     const response = await this.axios.request<
-      DataboxListAddItemsResponse,
-      DataboxListAddItemsBody
+      Databox.List.AddItemsResponse,
+      Databox.List.AddItemsBody
     >({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}/item`,
       method: 'POST',
@@ -183,6 +181,7 @@ export class DataboxListClient {
     });
     return response.data!.total;
   }
+
   /**
    * 移除列表元素 [V1]
    * DELETE /v1/list/namespace/{namespace}/list/{listId}/item
@@ -194,13 +193,13 @@ export class DataboxListClient {
    */
   async removeItem(
     listId: string,
-    item: ListItem,
-    type: DataboxListRemoveItemsType,
+    item: Databox.List.ListItem,
+    type: Databox.List.RemoveItemsType,
     count: number = 1
-  ): Promise<number | ListItem[]> {
+  ): Promise<number | Databox.List.ListItem[]> {
     const response = await this.axios.request<
-      DataboxListRemoveItemsResponse,
-      DataboxListRemoveItemsBody
+      Databox.List.RemoveItemsResponse,
+      Databox.List.RemoveItemsBody
     >({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}/item`,
       method: 'DELETE',
@@ -210,12 +209,13 @@ export class DataboxListClient {
         count,
       },
     });
-    if (type === DataboxListRemoveItemsType.EQUAL) {
+    if (type === Databox.List.RemoveItemsType.EQUAL) {
       return response.data!.affected as number;
     } else {
-      return response.data!.items as ListItem[];
+      return response.data!.items as Databox.List.ListItem[];
     }
   }
+
   /**
    * 通过索引更新列表单个元素 [V1]
    * PATCH /v1/list/namespace/{namespace}/list/{listId}/item/{index}
@@ -228,9 +228,9 @@ export class DataboxListClient {
   async updateItemByIndex(
     listId: string,
     index: number,
-    item: ListItem
+    item: Databox.List.ListItem
   ): Promise<void> {
-    await this.axios.request<void, DataboxListUpdateItemByIndexBody>({
+    await this.axios.request<void, Databox.List.UpdateItemByIndexBody>({
       url: `/v1/list/namespace/${this.namespace}/list/${listId}/item/${index}`,
       method: 'PATCH',
       data: {
@@ -238,6 +238,7 @@ export class DataboxListClient {
       },
     });
   }
+
   /**
    * 通过索引更新列表单个元素 [V1]
    * PATCH /v1/list/namespace/{namespace}/list/{listId}/item/{index}
@@ -247,16 +248,16 @@ export class DataboxListClient {
    * @param item 要查询的元素
    * @return 查询到的元素索引; -1代表未查询到元素
    */
-  async index(listId: string, item: ListItem): Promise<number> {
-    const response = await this.axios.request<DataboxListFindItemIndexResponse>(
-      {
-        url: `/v1/list/namespace/${this.namespace}/list/${listId}/index`,
-        method: 'GET',
-        params: {
-          item,
-        } as DataboxListFindItemIndexParam,
-      }
-    );
+  async index(listId: string, item: Databox.List.ListItem): Promise<number> {
+    const response = await this.axios.request<
+      Databox.List.FindItemIndexResponse
+    >({
+      url: `/v1/list/namespace/${this.namespace}/list/${listId}/index`,
+      method: 'GET',
+      params: {
+        item,
+      } as Databox.List.FindItemIndexParam,
+    });
     return response.data!.index;
   }
 }

@@ -1,102 +1,99 @@
-import {
-  IdentityUserConnectIdentityType,
-  IdentityUserIdentifierType,
-  IdentityUserProfile,
-} from './profile';
-import { MicofunOTPType } from '../micofun';
+import { Profile } from './profile';
+import { Micofun } from '../micofun';
 
-export interface IdentityUserTokenPack {
-  accessToken: string;
-  accessTokenExpired: string;
-  refreshToken: string;
-  refreshTokenExpired: string;
-}
+export namespace Auth {
+  export interface UserTokenPack {
+    accessToken: string;
+    accessTokenExpired: string;
+    refreshToken: string;
+    refreshTokenExpired: string;
+  }
 
-export interface IdentityEndUserLoginByPasswordBody {
-  identifier: string;
-  password: string;
-  identifierType?: IdentityUserIdentifierType;
-}
+  export interface EndUserLoginByPasswordBody {
+    identifier: string;
+    password: string;
+    identifierType?: Profile.UserIdentifierType;
+  }
 
-export type IdentityEndUserLoginResponse = {
-  uid: string;
-  token: IdentityUserTokenPack;
-};
+  export type EndUserLoginResponse = {
+    uid: string;
+    token: UserTokenPack;
+  };
 
-export interface IdentityPasswordlessLoginTicket {
-  instanceId: string;
-  identifier: string;
-  identifierType: IdentityUserIdentifierType;
-  context?: object;
-  profile?: object;
-}
+  export interface PasswordlessLoginTicket {
+    instanceId: string;
+    identifier: string;
+    identifierType: Profile.UserIdentifierType;
+    context?: object;
+    profile?: object;
+  }
 
-export interface IdentityApplyPasswordlessLoginBody {
-  identifier: string;
-  identifierType: IdentityUserIdentifierType;
-  ttl?: number;
-  context?: object;
-  profile?: IdentityUserProfile;
-}
+  export interface ApplyPasswordlessLoginBody {
+    identifier: string;
+    identifierType: Profile.UserIdentifierType;
+    ttl?: number;
+    context?: object;
+    profile?: Profile.UserProfile;
+  }
 
-export interface IdentityApplyOTPLoginBody
-  extends IdentityApplyPasswordlessLoginBody {
-  type?: MicofunOTPType;
-  size?: number;
-}
+  export interface ApplyOTPLoginBody extends ApplyPasswordlessLoginBody {
+    type?: Micofun.OTP.Type;
+    size?: number;
+  }
 
-export type IdentityApplyOTPLoginResponse = {
-  id: string;
-  otp: string;
-  expired: string;
-};
-export type IdentityApplyMagicTokenLoginResponse = {
-  token: string;
-  expired: string;
-};
+  export type ApplyOTPLoginResponse = {
+    id: string;
+    otp: string;
+    expired: string;
+  };
+  export type ApplyMagicTokenLoginResponse = {
+    token: string;
+    expired: string;
+  };
 
-export interface IdentityEndUserOTPLoginBody {
-  id: string;
-  otp: string;
-}
+  export interface EndUserOTPLoginBody {
+    id: string;
+    otp: string;
+  }
 
-export interface IdentityEndUserMagicTokenLoginBody {
-  token: string;
-}
+  export interface EndUserMagicTokenLoginBody {
+    token: string;
+  }
 
-export type IdentityEndUserPasswordlessLoginResponse = IdentityEndUserLoginResponse & {
-  context?: object;
-};
+  export type EndUserPasswordlessLoginResponse = EndUserLoginResponse & {
+    context?: object;
+  };
 
-export interface IdentityEndUserConnectLoginBody {
-  provider: IdentityUserConnectIdentityType;
-  ticket: string;
-}
+  export interface EndUserConnectLoginBody {
+    provider: Profile.UserConnectIdentityType;
+    ticket: string;
+  }
 
-export interface IdentityEndUserRefreshUserTokenParam {
-  refreshToken: string;
-}
+  export interface EndUserRefreshUserTokenParam {
+    refreshToken: string;
+  }
 
-export interface IdentityEndUserLogoutBody {
-  refreshToken: string;
-}
+  export interface EndUserLogoutBody {
+    refreshToken: string;
+  }
 
-export interface IdentityEndUserLogoutResponse {
-  uid: string;
-}
+  export interface EndUserLogoutResponse {
+    uid: string;
+  }
 
-export interface IdentityGenerateUserTokenParam {
-  uid: string;
-}
+  export interface GenerateUserTokenParam {
+    uid: string;
+  }
 
-export type IdentityGenerateUserTokenResponse = IdentityEndUserLoginResponse;
+  export type GenerateUserTokenResponse = EndUserLoginResponse;
 
-export interface IdentityInvalidUserTokenBody {
-  accessToken?: string[];
-  refreshToken?: string[];
-}
+  export interface InvalidUserTokenBody {
+    accessToken?: string[];
+    refreshToken?: string[];
+  }
 
-export interface IdentityUpdateUserPasswordBody {
-  uid: string;
-  password: string;
+  export interface UpdateUserPasswordBody {
+    uid: string;
+    password: string;
+  }
 }

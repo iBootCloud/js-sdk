@@ -4,39 +4,111 @@ import { Databox } from '../../../types';
 import { ObjectUtil } from '@ibootcloud/common-lib';
 
 export interface DataboxUIDClientConfig {
-  type?: Databox.UID.Type;
+  instanceId?: string;
 }
 
 export class DataboxUIDClient {
   axios: AxiosBaseClient;
-  idType: Databox.UID.Type;
+
+  instanceId?: string;
 
   constructor(
     moduleClientConfig: DataboxModuleClientConfig,
-    { type: idType = Databox.UID.Type.UUID }: DataboxUIDClientConfig = {}
+    { instanceId }: DataboxUIDClientConfig = {}
   ) {
-    this.idType = idType;
+    this.instanceId = instanceId;
     this.axios = new AxiosBaseClient({
       ...moduleClientConfig,
     });
   }
 
   /**
-   * 生成UID [V1]
-   * POST /v1/uid/generate
+   * 生成NanoID [V1]
+   * POST /v1/uid/generate/nanoid
    * 接口ID：23867249
    * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-23867249
    */
-  async generate(
-    type?: Databox.UID.Type,
-    opt?: { size?: number; alphabet?: string }
-  ): Promise<string> {
+  async nextNanoID({
+    size,
+    alphabet,
+    global = true,
+    instanceId,
+  }: Databox.UID.NextNanoIDParam = {}): Promise<string> {
     const response = await this.axios.request<Databox.UID.NextUIDResponse>({
-      url: `/v1/uid/generate`,
+      url: `/v1/uid/generate/nanoid`,
       method: 'POST',
       params: ObjectUtil.removeUndefined({
-        type: type ?? this.idType,
-        ...opt,
+        size,
+        alphabet,
+        global,
+        instanceId: global ? undefined : instanceId,
+      }),
+    });
+    return response.data!.uid;
+  }
+
+  /**
+   * 生成UUID [V1]
+   * POST /v1/uid/generate/uuid
+   * 接口ID：29741367
+   * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-29741367
+   */
+  async nextUUID({
+    simplify,
+    global = true,
+    instanceId,
+  }: Databox.UID.NextUUIDParam = {}): Promise<string> {
+    const response = await this.axios.request<Databox.UID.NextUIDResponse>({
+      url: `/v1/uid/generate/uuid`,
+      method: 'POST',
+      params: ObjectUtil.removeUndefined({
+        simplify,
+        global,
+        instanceId: global ? undefined : instanceId,
+      }),
+    });
+    return response.data!.uid;
+  }
+
+  /**
+   * 生成ObjectID [V1]
+   * POST /v1/uid/generate/objectID
+   * 接口ID：29741459
+   * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-29741459
+   */
+  async nextObjectID({
+    global = true,
+    instanceId,
+  }: Databox.UID.NextUIDParam = {}): Promise<string> {
+    const response = await this.axios.request<Databox.UID.NextUIDResponse>({
+      url: `/v1/uid/generate/objectID`,
+      method: 'POST',
+      params: ObjectUtil.removeUndefined({
+        global,
+        instanceId: global ? undefined : instanceId,
+      }),
+    });
+    return response.data!.uid;
+  }
+
+  /**
+   * 生成Serial [V1]
+   * POST /v1/uid/generate/serial
+   * 接口ID：29741472
+   * 接口地址：https://www.apifox.cn/web/project/1031456/apis/api-29741472
+   */
+  async nextSerial({
+    step,
+    global = true,
+    instanceId,
+  }: Databox.UID.NextSerialParam = {}): Promise<string> {
+    const response = await this.axios.request<Databox.UID.NextUIDResponse>({
+      url: `/v1/uid/generate/serial`,
+      method: 'POST',
+      params: ObjectUtil.removeUndefined({
+        step,
+        global,
+        instanceId: global ? undefined : instanceId,
       }),
     });
     return response.data!.uid;
